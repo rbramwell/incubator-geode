@@ -14,34 +14,41 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.geode.test.junit.rules.serializable;
+package org.apache.geode.test.dunit.rules.tests;
 
 import java.io.Serializable;
 
+import org.junit.Rule;
+import org.junit.Test;
 import org.junit.rules.ExternalResource;
-import org.junit.runner.Description;
-import org.junit.runners.model.Statement;
 
-/**
- * Serializable subclass of {@link org.junit.rules.ExternalResource ExternalResource}.
- */
-public abstract class SerializableExternalResource extends ExternalResource implements SerializableTestRule {
+import org.apache.geode.test.dunit.rules.DistributedRule;
+import org.apache.geode.test.dunit.rules.DistributedTestRule;
+import org.apache.geode.test.junit.rules.serializable.SerializableExternalResource;
 
-  public Statement apply(Statement base, Description description) {
-    return statement(base);
+public class DistributedTestRuleTest {
+
+  @DistributedRule
+  public SimpleRule simpleRule = new SimpleRule();
+
+  @Rule
+  public DistributedTestRule distributedTestRule = DistributedTestRule.builder().build();
+
+  @Test
+  public void test() throws Exception {
+    System.out.println("KIRK:test");
   }
 
-  private Statement statement(final Statement base) {
-    return new SerializableStatement() {
-      @Override
-      public void evaluate() throws Throwable {
-        before();
-        try {
-          base.evaluate();
-        } finally {
-          after();
-        }
-      }
-    };
+  private static class SimpleRule extends SerializableExternalResource {
+    @Override
+    protected void before() throws Throwable {
+      System.out.println("KIRK:before");
+    }
+
+    @Override
+    protected void after() {
+      System.out.println("KIRK:after");
+    }
   }
+
 }

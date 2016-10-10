@@ -58,67 +58,49 @@ import org.apache.geode.test.junit.categories.DistributedTest;
  * This is for testing client IDs
  */
 @Category(DistributedTest.class)
-public class TestClientIdsDUnitTest extends JUnit4DistributedTestCase {
+@SuppressWarnings("serial")
+public class TestClientIdsDUnitTest extends ManagementTestBase {
 
   private static final String k1 = "k1";
   private static final String k2 = "k2";
-
   private static final String client_k1 = "client-k1";
-
   private static final String client_k2 = "client-k2";
-
-  /** name of the test region */
   private static final String REGION_NAME = "ClientHealthStatsDUnitTest_Region";
 
   private static VM server = null;
-
   private static VM client = null;
-
   private static VM client2 = null;
 
-  private static VM managingNode = null;
-
-  private ManagementTestBase helper;
-
   @Override
-  public final void preSetUp() throws Exception {
-    this.helper = new ManagementTestBase(){};
+  public final void postSetUpManagementTestBase() throws Exception {
+    server = Host.getHost(0).getVM(1);
+    client = Host.getHost(0).getVM(2);
+    client2 = Host.getHost(0).getVM(3);
   }
 
   @Override
-  public final void postSetUp() throws Exception {
-    final Host host = Host.getHost(0);
-    managingNode = host.getVM(0);
-    server = host.getVM(1);
-    client = host.getVM(2);
-    client2 = host.getVM(3);
-  }
-
-  @Override
-  public final void preTearDown() throws Exception {
-    helper.closeCache(managingNode);
-    helper.closeCache(server);
-    helper.closeCache(client);
-    helper.closeCache(client2);
+  public final void postTearDownManagementTestBase() throws Exception {
+    closeCache(server);
+    closeCache(client);
+    closeCache(client2);
 
     disconnectFromDS();
   }
 
   @Test
   public void testClientIds() throws Exception {
-    helper.createManagementCache(managingNode);
-    helper.startManagingNode(managingNode);
+    createManagementCache(managingNode);
+    startManagingNode(managingNode);
     int port = (Integer) createServerCache(server);
-    DistributedMember serverMember = helper.getMember(server);
+    DistributedMember serverMember = getMember(server);
     createClientCache(client, NetworkUtils.getServerHostName(server.getHost()), port);
     createClientCache(client2, NetworkUtils.getServerHostName(server.getHost()), port);
     put(client);
     put(client2);
     verifyClientIds(managingNode, serverMember, port);
-    helper.stopManagingNode(managingNode);
+    stopManagingNode(managingNode);
   }
 
-  @SuppressWarnings("serial")
   private Object createServerCache(VM vm) {
     return vm.invoke(new SerializableCallable("Create Server Cache") {
       public Object call() {
@@ -132,7 +114,6 @@ public class TestClientIdsDUnitTest extends JUnit4DistributedTestCase {
     });
   }
 
-  @SuppressWarnings("serial")
   private void createClientCache(VM vm, final String host, final Integer port1) {
     vm.invoke(new SerializableCallable("Create Client Cache") {
 
@@ -158,7 +139,7 @@ public class TestClientIdsDUnitTest extends JUnit4DistributedTestCase {
   }
 
   private Integer createServerCache(DataPolicy dataPolicy) throws Exception {
-    Cache cache = helper.createCache(false);
+    Cache cache = createCache(false);
     AttributesFactory factory = new AttributesFactory();
     factory.setScope(Scope.DISTRIBUTED_ACK);
     factory.setDataPolicy(dataPolicy);
@@ -202,7 +183,6 @@ public class TestClientIdsDUnitTest extends JUnit4DistributedTestCase {
   /**
    * get member id
    */
-  @SuppressWarnings("serial")
   protected static DistributedMember getMember() throws Exception {
     GemFireCacheImpl cache = GemFireCacheImpl.getInstance();
     return cache.getDistributedSystem().getDistributedMember();
@@ -213,7 +193,6 @@ public class TestClientIdsDUnitTest extends JUnit4DistributedTestCase {
    * 
    * @param vm
    */
-  @SuppressWarnings("serial")
   protected void verifyClientIds(final VM vm,
       final DistributedMember serverMember, final int serverPort) {
     SerializableRunnable verifyCacheServerRemote = new SerializableRunnable(
@@ -262,7 +241,6 @@ public class TestClientIdsDUnitTest extends JUnit4DistributedTestCase {
    * 
    * @param vm
    */
-  @SuppressWarnings("serial")
   protected void put(final VM vm) {
     SerializableRunnable put = new SerializableRunnable("put") {
       public void run() {

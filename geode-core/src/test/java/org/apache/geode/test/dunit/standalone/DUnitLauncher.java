@@ -23,6 +23,7 @@ import org.apache.geode.distributed.internal.DistributionConfig;
 import org.apache.geode.distributed.internal.InternalLocator;
 import org.apache.geode.distributed.internal.membership.gms.membership.GMSJoinLeave;
 import org.apache.geode.internal.AvailablePortHelper;
+import org.apache.geode.internal.cache.GemFireCacheImpl;
 import org.apache.geode.internal.logging.LogService;
 import org.apache.geode.test.dunit.DUnitEnv;
 import org.apache.geode.test.dunit.Host;
@@ -74,7 +75,9 @@ public class DUnitLauncher {
   private static final int DEBUGGING_VM_NUM = -1;
   private static final int LOCATOR_VM_NUM = -2;
 
-  static final long STARTUP_TIMEOUT = 30 * 1000;
+  static final long STARTUP_TIMEOUT = 300 * 1000; // TODO: restore to 30
+  private static final String STARTUP_TIMEOUT_MESSAGE = "VMs did not start up within " + (STARTUP_TIMEOUT/1000) + " seconds";
+
   private static final String SUSPECT_FILENAME = "dunit_suspect.log";
   private static File DUNIT_SUSPECT_FILE;
 
@@ -192,7 +195,7 @@ public class DUnitLauncher {
 
     //wait for the VM to start up
     if(!processManager.waitForVMs(STARTUP_TIMEOUT)) {
-      throw new RuntimeException("VMs did not start up with 30 seconds");
+      throw new RuntimeException("VMs did not start up within 30 seconds");
     }
 
     locatorPort = startLocator(registry);
@@ -207,7 +210,7 @@ public class DUnitLauncher {
 
     //wait for the VMS to start up
     if(!processManager.waitForVMs(STARTUP_TIMEOUT)) {
-      throw new RuntimeException("VMs did not start up with 30 seconds");
+      throw new RuntimeException("VMs did not start up within 30 seconds");
     }
 
     //populate the Host class with our stubs. The tests use this host class

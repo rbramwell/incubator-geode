@@ -26,6 +26,7 @@ import java.util.concurrent.Callable;
 import com.jayway.awaitility.Awaitility;
 import hydra.MethExecutorResult;
 
+import org.apache.geode.internal.process.PidUnavailableException;
 import org.apache.geode.internal.process.ProcessUtils;
 import org.apache.geode.test.dunit.standalone.BounceResult;
 import org.apache.geode.test.dunit.standalone.RemoteDUnitVMIF;
@@ -95,7 +96,11 @@ public class VM implements Serializable {
    * Returns the process id of this {@code VM}.
    */
   public int getPid() {
-    return this.pid;
+//    try {
+      return invoke(() -> ProcessUtils.identifyPid());
+//    } catch (PidUnavailableException e) {
+//      return this.pid;
+//    }
   }
 
   /**

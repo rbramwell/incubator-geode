@@ -26,7 +26,6 @@ import org.junit.experimental.categories.Category;
 
 import org.apache.geode.test.junit.categories.UnitTest;
 
-
 @Category(UnitTest.class)
 public class QueryDataFunctionApplyLimitClauseTest {
 
@@ -47,8 +46,7 @@ public class QueryDataFunctionApplyLimitClauseTest {
   public void applyLimitClauseDoesNothingIfLimitClauseSpecified() {
     String limitClause = " LIMIT 50";
     String selectQueryWithLimit = selectQuery + limitClause;
-    assertThat(QueryDataFunction.applyLimitClause(selectQueryWithLimit, limit_10, queryResultSetLimit_100))
-      .isEqualTo(selectQueryWithLimit);
+    assertThat(QueryDataFunction.applyLimitClause(selectQueryWithLimit, limit_10, queryResultSetLimit_100)).isEqualTo(selectQueryWithLimit);
   }
 
   @Test
@@ -64,15 +62,13 @@ public class QueryDataFunctionApplyLimitClauseTest {
   @Test // GEODE-1907
   public void applyLimitClauseAddsQueryResultSetLimitIfMissingSpaceAfterFrom() {
     String selectQueryMissingSpaceAfterFrom = "SELECT * FROM/MyRegion";
-    assertThat(QueryDataFunction.applyLimitClause(selectQueryMissingSpaceAfterFrom, limit_0, queryResultSetLimit_100))
-      .isEqualTo(selectQueryMissingSpaceAfterFrom + " LIMIT " + queryResultSetLimit_100);
+    assertThat(QueryDataFunction.applyLimitClause(selectQueryMissingSpaceAfterFrom, limit_0, queryResultSetLimit_100)).isEqualTo(selectQueryMissingSpaceAfterFrom + " LIMIT " + queryResultSetLimit_100);
   }
 
   @Test
   public void applyLimitClauseDoesNotAddQueryResultSetLimitIfMissingSpaceAfterFromButLimitIsPresent() {
     String selectQueryMissingSpaceAfterFromWithLimit = "SELECT * FROM/MyRegion LIMIT " + limit_10;
-    assertThat(QueryDataFunction.applyLimitClause(selectQueryMissingSpaceAfterFromWithLimit, limit_0, queryResultSetLimit_100))
-      .isEqualTo(selectQueryMissingSpaceAfterFromWithLimit);
+    assertThat(QueryDataFunction.applyLimitClause(selectQueryMissingSpaceAfterFromWithLimit, limit_0, queryResultSetLimit_100)).isEqualTo(selectQueryMissingSpaceAfterFromWithLimit);
   }
 
 }

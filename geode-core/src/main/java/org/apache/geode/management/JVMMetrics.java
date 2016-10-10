@@ -17,6 +17,7 @@
 package org.apache.geode.management;
 
 import java.beans.ConstructorProperties;
+import java.io.Serializable;
 
 import org.apache.geode.cache.Region;
 
@@ -28,7 +29,7 @@ import org.apache.geode.cache.Region;
  * @since GemFire 7.0
  *
  */
-public class JVMMetrics {
+public class JVMMetrics implements Serializable {
 
   /**
    * Number of GCs performed

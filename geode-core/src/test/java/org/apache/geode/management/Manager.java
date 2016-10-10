@@ -14,12 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.apache.geode.management;
 
-dependencies {
-  compile 'com.jayway.jsonpath:json-path:' + project.'json-path.version'
-  testCompile 'commons-lang:commons-lang:' + project.'commons-lang.version'
-  compile ('junit:junit:' + project.'junit.version') {
-    exclude module: 'hamcrest-core'
-  }
-  compile 'org.hamcrest:hamcrest-all:' + project.'hamcrest-all.version'
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+
+@Target(FIELD)
+@Retention(RUNTIME)
+@Documented
+public @interface Manager {
+  String name() default "";
 }
