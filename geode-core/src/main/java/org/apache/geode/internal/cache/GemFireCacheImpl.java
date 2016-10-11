@@ -1655,7 +1655,9 @@ public class GemFireCacheImpl implements InternalCache, ClientCache, HasCachePer
     }
   }
 
-  public synchronized void shutDownAll() {
+  public void shutDownAll() {
+    synchronized(GemFireCacheImpl.class) {
+      synchronized(this) {
     boolean testIGE = Boolean.getBoolean("TestInternalGemFireError");
 
     if (testIGE) {
@@ -1706,6 +1708,8 @@ public class GemFireCacheImpl implements InternalCache, ClientCache, HasCachePer
     }
 
     close("Shut down all members", null, false, true);
+      }
+    }
   }
 
   private ExecutorService getShutdownAllExecutorService(int size) {
