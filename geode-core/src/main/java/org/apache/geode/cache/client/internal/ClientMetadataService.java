@@ -16,44 +16,27 @@
  */
 package org.apache.geode.cache.client.internal;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArraySet;
-
-import org.apache.logging.log4j.Logger;
-
 import org.apache.geode.SystemFailure;
-import org.apache.geode.cache.Cache;
-import org.apache.geode.cache.EntryOperation;
-import org.apache.geode.cache.FixedPartitionResolver;
-import org.apache.geode.cache.Operation;
-import org.apache.geode.cache.PartitionResolver;
-import org.apache.geode.cache.Region;
+import org.apache.geode.cache.*;
 import org.apache.geode.distributed.internal.DistributionConfig;
 import org.apache.geode.distributed.internal.ServerLocation;
-import org.apache.geode.internal.cache.BucketServerLocation66;
-import org.apache.geode.internal.cache.EntryOperationImpl;
-import org.apache.geode.internal.cache.LocalRegion;
-import org.apache.geode.internal.cache.PartitionedRegion;
-import org.apache.geode.internal.cache.PartitionedRegionHelper;
+import org.apache.geode.internal.cache.*;
 import org.apache.geode.internal.i18n.LocalizedStrings;
 import org.apache.geode.internal.logging.LogService;
+import org.apache.logging.log4j.Logger;
+
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
  * Maintains {@link ClientPartitionAdvisor} for Partitioned Regions on servers
  * Client operations will consult this service to identify the server locations
  * on which the data for the client operation is residing
  *
+ *
  * @since GemFire 6.5
+ *
  */
 public final class ClientMetadataService {
 
@@ -69,9 +52,7 @@ public final class ClientMetadataService {
 
   public static final int INITIAL_VERSION = 0;
 
-  /**
-   * random number generator used in pruning
-   */
+  /** random number generator used in pruning */
   private final Random rand = new Random();
 
   private volatile boolean isMetadataStable = true;
@@ -146,8 +127,11 @@ public final class ClientMetadataService {
       String partition = ((FixedPartitionResolver) resolver).getPartitionName(entryOp, prAdvisor.getFixedPartitionNames());
       if (partition == null) {
         Object[] prms = new Object[] { region.getName(), resolver };
-        throw new IllegalStateException(LocalizedStrings.PartitionedRegionHelper_FOR_REGION_0_PARTITIONRESOLVER_1_RETURNED_PARTITION_NAME_NULL.toLocalizedString(prms));
-      } else {
+        throw new IllegalStateException(
+            LocalizedStrings.PartitionedRegionHelper_FOR_REGION_0_PARTITIONRESOLVER_1_RETURNED_PARTITION_NAME_NULL
+                .toLocalizedString(prms));
+      }
+      else {
         bucketId = prAdvisor.assignFixedBucketId(region, partition, resolveKey);
         if (bucketId == -1) {
           // scheduleGetPRMetaData((LocalRegion)region);
@@ -161,9 +145,9 @@ public final class ClientMetadataService {
 
     ServerLocation bucketServerLocation = getServerLocation(region, operation, bucketId);
     ServerLocation location = null;
-    if (bucketServerLocation != null) {
-      location = new ServerLocation(bucketServerLocation.getHostName(), bucketServerLocation.getPort());
-    }
+    if (bucketServerLocation != null)
+      location = new ServerLocation(bucketServerLocation.getHostName(),
+          bucketServerLocation.getPort());
     return location;
   }
 
@@ -337,6 +321,12 @@ public final class ClientMetadataService {
     while (!currentBucketSet.equals(buckets)) {
       ServerLocation server = findNextServer(serverToBucketsMap.entrySet(), currentBucketSet);
       if (server == null) {
+//        HashSet<Integer> rBuckets = prunedServerToBucketsMap
+//            .get(randomFirstServer);
+//        HashSet<Integer> remainingBuckets = new HashSet<Integer>(buckets);
+//        remainingBuckets.removeAll(currentBucketSet);
+//        rBuckets.addAll(remainingBuckets);
+//        prunedServerToBucketsMap.put(randomFirstServer, rBuckets);
         break;
       }
 
@@ -384,7 +374,7 @@ public final class ClientMetadataService {
 
     //return node;
     Random r = new Random();
-    if (nodesOfEqualSize.size() > 0) {
+    if(nodesOfEqualSize.size() > 0){
       return nodesOfEqualSize.get(r.nextInt(nodesOfEqualSize.size()));
     }
 
@@ -436,8 +426,11 @@ public final class ClientMetadataService {
       String partition = ((FixedPartitionResolver) resolver).getPartitionName(entryOp, prAdvisor.getFixedPartitionNames());
       if (partition == null) {
         Object[] prms = new Object[] { region.getName(), resolver };
-        throw new IllegalStateException(LocalizedStrings.PartitionedRegionHelper_FOR_REGION_0_PARTITIONRESOLVER_1_RETURNED_PARTITION_NAME_NULL.toLocalizedString(prms));
-      } else {
+        throw new IllegalStateException(
+            LocalizedStrings.PartitionedRegionHelper_FOR_REGION_0_PARTITIONRESOLVER_1_RETURNED_PARTITION_NAME_NULL
+                .toLocalizedString(prms));
+      }
+      else {
         bucketId = prAdvisor.assignFixedBucketId(region, partition, resolveKey);
         // This bucketid can be -1 in some circumstances where we don't have information about 
         // all the partition on the server.
@@ -460,8 +453,21 @@ public final class ClientMetadataService {
     this.setMetadataStable(false);
     region.getCachePerfStats().incNonSingleHopsCount();
     if (isRecursive) {
-      getClientPRMetadataForRegion(region);
-    } else {
+      try {
+        getClientPRMetadata(region);
+      }
+      catch (VirtualMachineError e) {
+        SystemFailure.initiateFailure(e);
+        throw e;
+      }
+      catch (Throwable e) {
+        SystemFailure.checkFailure();
+        if (logger.isDebugEnabled()) {
+          logger.debug("An exception occurred while fetching metadata", e);
+        }
+      }
+    }
+    else {
       synchronized (fetchTaskCountLock) {
         refreshTaskCount++;
       }
@@ -519,8 +525,10 @@ public final class ClientMetadataService {
           GetClientPRMetaDataOp.execute(pool, regionFullPath, this);
           region.getCachePerfStats().incMetaDataRefreshCount();
         } else {
-          LocalRegion leaderRegion = (LocalRegion) region.getCache().getRegion(colocatedWith);
-          if (this.getClientPartitionAdvisor(colocatedWith) == null) {
+          ClientPartitionAdvisor colocatedAdvisor = this.getClientPartitionAdvisor(colocatedWith);
+          LocalRegion leaderRegion = (LocalRegion)region.getCache()
+          .getRegion(colocatedWith);
+          if (colocatedAdvisor == null) {
             scheduleGetPRMetaData(leaderRegion, true);
             return;
           } else {
@@ -627,8 +635,11 @@ public final class ClientMetadataService {
       String partition = ((FixedPartitionResolver) resolver).getPartitionName(entryOp, prAdvisor.getFixedPartitionNames());
       if (partition == null) {
         Object[] prms = new Object[] { region.getName(), resolver };
-        throw new IllegalStateException(LocalizedStrings.PartitionedRegionHelper_FOR_REGION_0_PARTITIONRESOLVER_1_RETURNED_PARTITION_NAME_NULL.toLocalizedString(prms));
-      } else {
+        throw new IllegalStateException(
+            LocalizedStrings.PartitionedRegionHelper_FOR_REGION_0_PARTITIONRESOLVER_1_RETURNED_PARTITION_NAME_NULL
+                .toLocalizedString(prms));
+      }
+      else {
         bucketId = prAdvisor.assignFixedBucketId(region, partition, resolveKey);
       }
     } else {
