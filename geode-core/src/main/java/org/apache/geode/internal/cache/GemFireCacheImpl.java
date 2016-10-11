@@ -523,7 +523,7 @@ public class GemFireCacheImpl implements InternalCache, ClientCache, HasCachePer
 
   private final Object clientMetaDatServiceLock = new Object();
 
-  private volatile boolean isShutDownAll = false;
+  private final AtomicBoolean isShutDownAll = new AtomicBoolean(false);
 
   private final ResourceAdvisor resourceAdvisor;
   private final JmxManagerAdvisor jmxAdvisor;
@@ -642,7 +642,7 @@ public class GemFireCacheImpl implements InternalCache, ClientCache, HasCachePer
     sb.append("GemFireCache[");
     sb.append("id = " + System.identityHashCode(this));
     sb.append("; isClosing = " + this.isClosing);
-    sb.append("; isShutDownAll = " + this.isShutDownAll);
+    sb.append("; isShutDownAll = " + isCacheAtShutdownAll());
     sb.append("; created = " + this.creationDate);
     sb.append("; server = " + this.isServer);
     sb.append("; copyOnRead = " + this.copyOnRead);
@@ -1641,7 +1641,7 @@ public class GemFireCacheImpl implements InternalCache, ClientCache, HasCachePer
   }
 
   public boolean isCacheAtShutdownAll() {
-    return isShutDownAll;
+    return isShutDownAll.get();
   }
 
   /**
@@ -1656,8 +1656,6 @@ public class GemFireCacheImpl implements InternalCache, ClientCache, HasCachePer
   }
 
   public void shutDownAll() {
-    synchronized(GemFireCacheImpl.class) {
-      synchronized(this) {
     boolean testIGE = Boolean.getBoolean("TestInternalGemFireError");
 
     if (testIGE) {
@@ -1675,8 +1673,13 @@ public class GemFireCacheImpl implements InternalCache, ClientCache, HasCachePer
         LocalRegion.ISSUE_CALLBACKS_TO_CACHE_OBSERVER = false;
       }
     }
-    this.isShutDownAll = true;
+    if (!this.isShutDownAll.compareAndSet(false, true)) {
+      // it's already doing shutdown by another thread
+      return;
+    }
 
+    synchronized(GemFireCacheImpl.class) {
+      synchronized(this) {
     // bug 44031 requires multithread shutdownall should be grouped
     // by root region. However, shutDownAllDuringRecovery.conf test revealed that
     // we have to close colocated child regions first.
@@ -4058,7 +4061,6 @@ public class GemFireCacheImpl implements InternalCache, ClientCache, HasCachePer
    * cache requires, or does not require notification of all region/entry events.
    */
   public void addPartitionedRegion(PartitionedRegion r) {
-    synchronized (GemFireCacheImpl.class) {
       synchronized (this.partitionedRegions) {
         if (r.isDestroyed()) {
           if (logger.isDebugEnabled()) {
@@ -4070,7 +4072,6 @@ public class GemFireCacheImpl implements InternalCache, ClientCache, HasCachePer
           getCachePerfStats().incPartitionedRegions(1);
         }
       }
-    }
   }
 
   /**
@@ -4163,7 +4164,6 @@ public class GemFireCacheImpl implements InternalCache, ClientCache, HasCachePer
    * @return true if the region should deliver all of its events to this cache
    */
   protected boolean requiresNotificationFromPR(PartitionedRegion r) {
-    synchronized (GemFireCacheImpl.class) {
       boolean hasSerialSenders = hasSerialSenders(r);
       boolean result = hasSerialSenders;
       if (!result) {
@@ -4178,7 +4178,6 @@ public class GemFireCacheImpl implements InternalCache, ClientCache, HasCachePer
 
       }
       return result;
-    }
   }
 
   private boolean hasSerialSenders(PartitionedRegion r) {
