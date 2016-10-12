@@ -523,7 +523,7 @@ public class GemFireCacheImpl implements InternalCache, ClientCache, HasCachePer
 
   private final Object clientMetaDatServiceLock = new Object();
 
-  private final AtomicBoolean isShutDownAll = new AtomicBoolean(false);
+  private volatile boolean isShutDownAll = false;
 
   private final ResourceAdvisor resourceAdvisor;
   private final JmxManagerAdvisor jmxAdvisor;
@@ -1641,7 +1641,7 @@ public class GemFireCacheImpl implements InternalCache, ClientCache, HasCachePer
   }
 
   public boolean isCacheAtShutdownAll() {
-    return isShutDownAll.get();
+    return isShutDownAll;
   }
 
   /**
@@ -1656,29 +1656,26 @@ public class GemFireCacheImpl implements InternalCache, ClientCache, HasCachePer
   }
 
   public void shutDownAll() {
-    boolean testIGE = Boolean.getBoolean("TestInternalGemFireError");
-
-    if (testIGE) {
-      InternalGemFireError assErr = new InternalGemFireError(LocalizedStrings.GemFireCache_UNEXPECTED_EXCEPTION.toLocalizedString());
-      throw assErr;
-    }
-    if (isCacheAtShutdownAll()) {
-      // it's already doing shutdown by another thread
-      return;
-    }
-    if (LocalRegion.ISSUE_CALLBACKS_TO_CACHE_OBSERVER) {
-      try {
-        CacheObserverHolder.getInstance().beforeShutdownAll();
-      } finally {
-        LocalRegion.ISSUE_CALLBACKS_TO_CACHE_OBSERVER = false;
-      }
-    }
-    if (!this.isShutDownAll.compareAndSet(false, true)) {
-      // it's already doing shutdown by another thread
-      return;
-    }
-
     synchronized (GemFireCacheImpl.class) {
+      boolean testIGE = Boolean.getBoolean("TestInternalGemFireError");
+
+      if (testIGE) {
+        InternalGemFireError assErr = new InternalGemFireError(LocalizedStrings.GemFireCache_UNEXPECTED_EXCEPTION.toLocalizedString());
+        throw assErr;
+      }
+      if (isCacheAtShutdownAll()) {
+        // it's already doing shutdown by another thread
+        return;
+      }
+      if (LocalRegion.ISSUE_CALLBACKS_TO_CACHE_OBSERVER) {
+        try {
+          CacheObserverHolder.getInstance().beforeShutdownAll();
+        } finally {
+          LocalRegion.ISSUE_CALLBACKS_TO_CACHE_OBSERVER = false;
+        }
+      }
+      this.isShutDownAll = true;
+
       // bug 44031 requires multithread shutdownall should be grouped
       // by root region. However, shutDownAllDuringRecovery.conf test revealed that
       // we have to close colocated child regions first.
