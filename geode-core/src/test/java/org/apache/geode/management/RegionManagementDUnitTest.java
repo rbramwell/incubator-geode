@@ -125,17 +125,17 @@ public class RegionManagementDUnitTest extends ManagementTestBase {
 
     for (VM memberVM : this.memberVMs) {
       createDistributedRegion(memberVM, REGION_NAME);
-      validateReplicateRegionAfterCreate(memberVM);
+      verifyReplicateRegionAfterCreate(memberVM);
     }
 
     verifyRemoteDistributedRegion(this.managerVM, 3);
 
     for (VM memberVM : this.memberVMs) {
       closeRegion(memberVM, REGION_PATH);
-      validateReplicatedRegionAfterClose(memberVM);
+      verifyReplicatedRegionAfterClose(memberVM);
     }
 
-    ensureProxyCleanup(this.managerVM);
+    verifyProxyCleanup(this.managerVM);
   }
 
   /**
@@ -154,14 +154,14 @@ public class RegionManagementDUnitTest extends ManagementTestBase {
 
     for (VM memberVM : this.memberVMs) {
       createPartitionRegion(memberVM, PARTITIONED_REGION_NAME);
-      validatePartitionRegionAfterCreate(memberVM);
+      verifyPartitionRegionAfterCreate(memberVM);
     }
 
-    validateRemotePartitionRegion(this.managerVM);
+    verifyRemotePartitionRegion(this.managerVM);
 
     for (VM memberVM : this.memberVMs) {
       closeRegion(memberVM, PARTITIONED_REGION_PATH);
-      validatePartitionRegionAfterClose(memberVM);
+      verifyPartitionRegionAfterClose(memberVM);
     }
   }
 
@@ -176,18 +176,18 @@ public class RegionManagementDUnitTest extends ManagementTestBase {
   public void testFixedPRRegionMBean() throws Exception {
     initManagement(false);
 
-    // Adding notif listener for remote cache memberVMs
+    // Adding notification listener for remote cache memberVMs
     addMemberNotificationListener(this.managerVM); // TODO: what does this do for us?
 
     int primaryIndex = 0;
-    for (VM vm : this.memberVMs) {
+    for (VM memberVM : this.memberVMs) {
       List<FixedPartitionAttributes> fixedPartitionAttributesList = createFixedPartitionList(primaryIndex + 1);
-      vm.invoke(() -> createFixedPartitionRegion(fixedPartitionAttributesList));
+      memberVM.invoke(() -> createFixedPartitionRegion(fixedPartitionAttributesList));
       primaryIndex++;
     }
 
-//    // Workaround for bug 46683. Renable validation when bug is fixed.
-//    validateRemoteFixedPartitionRegion(this.managerVM);
+//    // TODO: Workaround for bug 46683. Reenable validation when bug is fixed.
+//    verifyRemoteFixedPartitionRegion(this.managerVM);
 //
 //    for (VM vm : this.memberVMs) {
 //      closeFixedPartitionRegion(vm);
@@ -202,49 +202,49 @@ public class RegionManagementDUnitTest extends ManagementTestBase {
   public void testRegionAggregate() throws Exception {
     initManagement(true);
 
-    // Adding notif listener for remote cache memberVMs
+    // Adding notification listener for remote cache memberVMs
     addDistributedSystemNotificationListener(this.managerVM); // TODO: what does this do for us?
 
-    for (VM vm : this.memberVMs) {
-      createDistributedRegion(vm, REGION_NAME);
+    for (VM memberVM : this.memberVMs) {
+      createDistributedRegion(memberVM, REGION_NAME);
     }
 
-    validateDistributedMBean(this.managerVM, 3);
+    verifyDistributedMBean(this.managerVM, 3);
     createDistributedRegion(this.managerVM, REGION_NAME);
-    validateDistributedMBean(this.managerVM, 4);
+    verifyDistributedMBean(this.managerVM, 4);
 
-    for (VM vm : this.memberVMs) {
-      closeRegion(vm, REGION_PATH);
+    for (VM memberVM : this.memberVMs) {
+      closeRegion(memberVM, REGION_PATH);
     }
 
-    ensureProxyCleanup(this.managerVM);
+    verifyProxyCleanup(this.managerVM);
 
-    validateDistributedMBean(this.managerVM, 1);
+    verifyDistributedMBean(this.managerVM, 1);
     closeRegion(this.managerVM, REGION_PATH);
-    validateDistributedMBean(this.managerVM, 0);
+    verifyDistributedMBean(this.managerVM, 0);
   }
 
   @Test
   public void testNavigationAPIS() throws Exception {
     initManagement(true);
 
-    for (VM vm : this.memberVMs) {
-      createDistributedRegion(vm, REGION_NAME);
-      createPartitionRegion(vm, PARTITIONED_REGION_NAME);
+    for (VM memberVM : this.memberVMs) {
+      createDistributedRegion(memberVM, REGION_NAME);
+      createPartitionRegion(memberVM, PARTITIONED_REGION_NAME);
     }
 
     createDistributedRegion(this.managerVM, REGION_NAME);
     createPartitionRegion(this.managerVM, PARTITIONED_REGION_NAME);
     List<String> memberIds = new ArrayList<>();
 
-    for (VM vm : this.memberVMs) {
-      memberIds.add(getMemberId(vm));
+    for (VM memberVM : this.memberVMs) {
+      memberIds.add(getMemberId(memberVM));
     }
 
-    checkNavigationApis(this.managerVM, memberIds);
+    verifyNavigationApis(this.managerVM, memberIds);
 
-    for (VM vm : this.memberVMs) {
-      closeRegion(vm, REGION_PATH);
+    for (VM memberVM : this.memberVMs) {
+      closeRegion(memberVM, REGION_PATH);
     }
     closeRegion(this.managerVM, REGION_PATH);
   }
@@ -254,18 +254,18 @@ public class RegionManagementDUnitTest extends ManagementTestBase {
   public void testSubRegions() throws Exception {
     initManagement(false);
 
-    for (VM vm : this.memberVMs) {
-      createLocalRegion(vm, LOCAL_REGION_NAME);
-      createSubRegion(vm, LOCAL_REGION_NAME, LOCAL_SUB_REGION_NAME);
+    for (VM memberVM : this.memberVMs) {
+      createLocalRegion(memberVM, LOCAL_REGION_NAME);
+      createSubRegion(memberVM, LOCAL_REGION_NAME, LOCAL_SUB_REGION_NAME);
     }
 
-    for (VM vm : this.memberVMs) {
-      checkSubRegions(vm, LOCAL_SUB_REGION_PATH);
+    for (VM memberVM : this.memberVMs) {
+      verifySubRegions(memberVM, LOCAL_SUB_REGION_PATH);
     }
 
-    for (VM vm : this.memberVMs) {
-      closeRegion(vm, LOCAL_REGION_NAME);
-      checkNullRegions(vm, LOCAL_SUB_REGION_NAME);
+    for (VM memberVM : this.memberVMs) {
+      closeRegion(memberVM, LOCAL_REGION_NAME);
+      verifyNullRegions(memberVM, LOCAL_SUB_REGION_NAME);
     }
   }
 
@@ -274,34 +274,28 @@ public class RegionManagementDUnitTest extends ManagementTestBase {
     initManagement(false);
     createSpecialRegion(this.memberVMs[0]);
     DistributedMember member = getMember(this.memberVMs[0]);
-    checkSpecialRegion(this.managerVM, member);
+    verifySpecialRegion(this.managerVM);
   }
 
   @Test
   public void testLruStats() throws Exception {
     initManagement(false);
-    for (VM vm : this.memberVMs) {
-      createDiskRegion(vm);
+    for (VM memberVM : this.memberVMs) {
+      createDiskRegion(memberVM);
     }
-    checkEntrySize(this.managerVM, 3);
+    verifyEntrySize(this.managerVM, 3);
   }
 
-  /**
-   * Invoked in all VMs
-   */
-  private void closeRegion(final VM vm, final String regionPath) {
-    vm.invoke("closeRegion", () -> {
+  private void closeRegion(final VM anyVM, final String regionPath) {
+    anyVM.invoke("closeRegion", () -> {
       GemFireCacheImpl cache = GemFireCacheImpl.getInstance();
       Region region = cache.getRegion(regionPath);
       region.close();
     });
   }
 
-  /**
-   * Invoked in managedNode VM
-   */
-  private void createSpecialRegion(final VM vm) throws Exception {
-    vm.invoke("createSpecialRegion", () -> {
+  private void createSpecialRegion(final VM memberVM) throws Exception {
+    memberVM.invoke("createSpecialRegion", () -> {
       Cache cache = getCache();
       AttributesFactory attributesFactory = new AttributesFactory();
       attributesFactory.setValueConstraint(Portfolio.class);
@@ -312,21 +306,15 @@ public class RegionManagementDUnitTest extends ManagementTestBase {
     });
   }
 
-  /**
-   * Invoked in this.managerVM VM
-   */
-  private void checkSpecialRegion(final VM vm, final DistributedMember member) throws Exception {
-    vm.invoke("checkSpecialRegion", () -> {
+  private void verifySpecialRegion(final VM managerVM) throws Exception {
+    managerVM.invoke("verifySpecialRegion", () -> {
       MBeanUtil.getDistributedRegionMbean("/p-os", 1); // TODO: do something?
       MBeanUtil.getDistributedRegionMbean("/p_os", 1);
     });
   }
 
-  /**
-   * Invoked in managedNode VMs
-   */
-  private void createDiskRegion(final VM vm) throws Exception {
-    vm.invoke("createDiskRegion", () -> {
+  private void createDiskRegion(final VM memberVM) throws Exception {
+    memberVM.invoke("createDiskRegion", () -> {
       AttributesFactory factory = new AttributesFactory();
       factory.setScope(Scope.LOCAL);
       factory.setEvictionAttributes(EvictionAttributes.createLRUMemoryAttributes(20, new TestObjectSizerImpl(), EvictionAction.LOCAL_DESTROY));
@@ -349,42 +337,30 @@ public class RegionManagementDUnitTest extends ManagementTestBase {
     });
   }
 
-  /**
-   * Invoked in this.managerVM VM
-   */
-  private void checkEntrySize(final VM vm, final int expectedMembers) throws Exception {
-    vm.invoke("checkEntrySize", () -> {
+  private void verifyEntrySize(final VM managerVM, final int expectedMembers) throws Exception {
+    managerVM.invoke("verifyEntrySize", () -> {
       DistributedRegionMXBean distributedRegionMXBean = MBeanUtil.getDistributedRegionMbean(REGION_PATH, expectedMembers);
       assertNotNull(distributedRegionMXBean);
       assertTrue(distributedRegionMXBean.getEntrySize() > 0);
     });
   }
 
-  /**
-   * Invoked in managedNode VMs
-   */
-  private void checkSubRegions(final VM vm, final String subRegionPath) throws Exception {
-    vm.invoke("checkSubRegions", () -> {
+  private void verifySubRegions(final VM memberVM, final String subRegionPath) throws Exception {
+    memberVM.invoke("verifySubRegions", () -> {
       RegionMXBean regionMXBean = managementService.getLocalRegionMBean(subRegionPath);
       assertNotNull(regionMXBean);
     });
   }
 
-  /**
-   * Invoked in managedNode VMs
-   */
-  private void checkNullRegions(final VM vm, final String subRegionPath) throws Exception {
-    vm.invoke("checkNullRegions", () -> {
+  private void verifyNullRegions(final VM memberVM, final String subRegionPath) throws Exception {
+    memberVM.invoke("verifyNullRegions", () -> {
       RegionMXBean regionMXBean = managementService.getLocalRegionMBean(subRegionPath);
       assertNull(regionMXBean);
     });
   }
 
-  /**
-   * Invoked in this.managerVM VM
-   */
-  private void checkNavigationApis(final VM vm, final List<String> managedNodeMemberIds) {
-    vm.invoke("checkNavigationApis", () -> {
+  private void verifyNavigationApis(final VM managerVM, final List<String> memberIds) {
+    managerVM.invoke("verifyNavigationApis", () -> {
       ManagementService service = getManagementService();
       assertNotNull(service.getDistributedSystemMXBean());
 
@@ -404,7 +380,7 @@ public class RegionManagementDUnitTest extends ManagementTestBase {
       expectedName = MBeanJMXAdapter.getDistributedRegionMbeanName(REGION_PATH);
       assertEquals(expectedName, actualName);
 
-      for (String memberId : managedNodeMemberIds) {
+      for (String memberId : memberIds) {
         ObjectName memberMBeanName = MBeanJMXAdapter.getMemberMBeanName(memberId);
         waitForProxy(memberMBeanName, MemberMXBean.class);
 
@@ -421,7 +397,7 @@ public class RegionManagementDUnitTest extends ManagementTestBase {
         assertTrue(listOfNames.contains(expectedName));
       }
 
-      for (String memberId : managedNodeMemberIds) {
+      for (String memberId : memberIds) {
         ObjectName memberMBeanName = MBeanJMXAdapter.getMemberMBeanName(memberId);
         waitForProxy(memberMBeanName, MemberMXBean.class);
 
@@ -442,10 +418,6 @@ public class RegionManagementDUnitTest extends ManagementTestBase {
 
   /**
    * Invoked in controller VM
-   *
-   * Creates a Fixed Partition List to be used for Fixed Partition Region
-   *
-   * @param primaryIndex index for each fixed partition
    */
   private List<FixedPartitionAttributes> createFixedPartitionList(final int primaryIndex) {
     List<FixedPartitionAttributes> fixedPartitionAttributesList = new ArrayList<>();
@@ -468,11 +440,7 @@ public class RegionManagementDUnitTest extends ManagementTestBase {
   }
 
   /**
-   * Invoked in managedNodes VMs
-   *
-   * Creates a Fixed Partitioned Region
-   *
-   * @param fixedPartitionAttributesList partition list
+   * Invoked in member VMs
    */
   private static void createFixedPartitionRegion(final List<FixedPartitionAttributes> fixedPartitionAttributesList) {
     GemFireCacheImpl cache = GemFireCacheImpl.getInstance();
@@ -505,14 +473,16 @@ public class RegionManagementDUnitTest extends ManagementTestBase {
 
     assertEquals(3, fixedPrData.length);
     for (int i = 0; i < fixedPrData.length; i++) {
-//      LogWriterUtils.getLogWriter().info("<ExpectedString> Fixed PR Data is " + fixedPrData[i] + "</ExpectedString> ");
+      //LogWriterUtils.getLogWriter().info("<ExpectedString> Fixed PR Data is " + fixedPrData[i] + "</ExpectedString> ");
     }
   }
 
   /**
-   * Invoked in this.managerVM VM
+   * Invoked in manager VM
+   *
+   * TODO: unused method
    */
-  private void validateRemoteFixedPartitionRegion(final VM vm) throws Exception {
+  private void verifyRemoteFixedPartitionRegion(final VM vm) throws Exception {
     vm.invoke("Verify Partition region", () -> {
       GemFireCacheImpl cache = GemFireCacheImpl.getInstance();
       Set<DistributedMember> otherMemberSet = cache.getDistributionManager().getOtherNormalDistributionManagerIds();
@@ -528,17 +498,14 @@ public class RegionManagementDUnitTest extends ManagementTestBase {
         assertEquals(3, fixedPrData.length);
 
         for (int i = 0; i < fixedPrData.length; i++) {
-//          LogWriterUtils.getLogWriter().info("<ExpectedString> Remote PR Data is " + fixedPrData[i] + "</ExpectedString> ");
+          //LogWriterUtils.getLogWriter().info("<ExpectedString> Remote PR Data is " + fixedPrData[i] + "</ExpectedString> ");
         }
       }
     });
   }
 
-  /**
-   * Invoked in this.managerVM VM
-   */
-  private void addMemberNotificationListener(final VM vm) {
-    vm.invoke("addMemberNotificationListener", () -> {
+  private void addMemberNotificationListener(final VM managerVM) {
+    managerVM.invoke("addMemberNotificationListener", () -> {
       GemFireCacheImpl cache = GemFireCacheImpl.getInstance();
       Set<DistributedMember> otherMemberSet = cache.getDistributionManager().getOtherNormalDistributionManagerIds();
 
@@ -550,7 +517,7 @@ public class RegionManagementDUnitTest extends ManagementTestBase {
         Set<ObjectName> names = service.queryMBeanNames(member);
         if (names != null) {
           for (ObjectName name : names) {
-//            LogWriterUtils.getLogWriter().info("<ExpectedString> ObjectNames arr" + name + "</ExpectedString> ");
+            //LogWriterUtils.getLogWriter().info("<ExpectedString> ObjectNames arr" + name + "</ExpectedString> ");
           }
         }
 
@@ -562,26 +529,21 @@ public class RegionManagementDUnitTest extends ManagementTestBase {
   }
 
   /**
-   * Invoked in this.managerVM VM
-   *
    * Add a Notification listener to DistributedSystemMBean which should gather
    * all the notifications which are propagated through all individual
    * MemberMBeans Hence Region created/destroyed should be visible to this
    * listener
    */
-  private void addDistributedSystemNotificationListener(final VM vm) {
-    vm.invoke("addDistributedSystemNotificationListener", () -> {
+  private void addDistributedSystemNotificationListener(final VM managerVM) {
+    managerVM.invoke("addDistributedSystemNotificationListener", () -> {
       DistributedSystemNotificationListener listener = new DistributedSystemNotificationListener();
       ObjectName systemMBeanName = MBeanJMXAdapter.getDistributedSystemName();
       ManagementFactory.getPlatformMBeanServer().addNotificationListener(systemMBeanName, listener, null, null);
     });
   }
 
-  /**
-   * Invoked in this.managerVM VM
-   */
-  private void ensureProxyCleanup(final VM vm) {
-    vm.invoke("ensureProxyCleanup", () -> {
+  private void verifyProxyCleanup(final VM managerVM) {
+    managerVM.invoke("verifyProxyCleanup", () -> {
       GemFireCacheImpl cache = GemFireCacheImpl.getInstance();
       Set<DistributedMember> otherMemberSet = cache.getDistributionManager().getOtherNormalDistributionManagerIds();
 
@@ -594,11 +556,8 @@ public class RegionManagementDUnitTest extends ManagementTestBase {
     });
   }
 
-  /**
-   * Invoked in this.managerVM VM
-   */
-  private void verifyRemoteDistributedRegion(final VM vm, final int expectedMembers) throws Exception {
-    vm.invoke("verifyRemoteDistributedRegion", () -> {
+  private void verifyRemoteDistributedRegion(final VM managerVM, final int expectedMembers) throws Exception {
+    managerVM.invoke("verifyRemoteDistributedRegion", () -> {
       GemFireCacheImpl cache = GemFireCacheImpl.getInstance();
       Set<DistributedMember> otherMemberSet = cache.getDistributionManager().getOtherNormalDistributionManagerIds();
 
@@ -614,8 +573,8 @@ public class RegionManagementDUnitTest extends ManagementTestBase {
         assertNotNull(membershipData);
         assertNotNull(evictionData);
 
-//        LogWriterUtils.getLogWriter().info("<ExpectedString> Membership Data is " + membershipData.toString() + "</ExpectedString> ");
-//        LogWriterUtils.getLogWriter().info("<ExpectedString> Eviction Data is " + membershipData.toString() + "</ExpectedString> ");
+        //LogWriterUtils.getLogWriter().info("<ExpectedString> Membership Data is " + membershipData.toString() + "</ExpectedString> ");
+        //LogWriterUtils.getLogWriter().info("<ExpectedString> Eviction Data is " + membershipData.toString() + "</ExpectedString> ");
       }
 
       DistributedRegionMXBean bean = null;
@@ -626,11 +585,8 @@ public class RegionManagementDUnitTest extends ManagementTestBase {
     });
   }
 
-  /**
-   * Invoked in this.managerVM VM
-   */
-  private void validateDistributedMBean(final VM vm, final int expectedMembers) {
-    vm.invoke("validateDistributedMBean", () -> {
+  private void verifyDistributedMBean(final VM managerVM, final int expectedMembers) {
+    managerVM.invoke("verifyDistributedMBean", () -> {
       final ManagementService service = getManagementService();
 
       if (expectedMembers == 0) {
@@ -647,17 +603,14 @@ public class RegionManagementDUnitTest extends ManagementTestBase {
       assertEquals(expectedMembers, bean.getMembers().length);
 
       // Check Stats related Data
-//      LogWriterUtils.getLogWriter().info("<ExpectedString> CacheListenerCallsAvgLatency is " + bean.getCacheListenerCallsAvgLatency() + "</ExpectedString> ");
-//      LogWriterUtils.getLogWriter().info("<ExpectedString> CacheWriterCallsAvgLatency is " + bean.getCacheWriterCallsAvgLatency() + "</ExpectedString> ");
-//      LogWriterUtils.getLogWriter().info("<ExpectedString> CreatesRate is " + bean.getCreatesRate() + "</ExpectedString> ");
+      //LogWriterUtils.getLogWriter().info("<ExpectedString> CacheListenerCallsAvgLatency is " + bean.getCacheListenerCallsAvgLatency() + "</ExpectedString> ");
+      //LogWriterUtils.getLogWriter().info("<ExpectedString> CacheWriterCallsAvgLatency is " + bean.getCacheWriterCallsAvgLatency() + "</ExpectedString> ");
+      //LogWriterUtils.getLogWriter().info("<ExpectedString> CreatesRate is " + bean.getCreatesRate() + "</ExpectedString> ");
     });
   }
 
-  /**
-   * Invoked in this.managerVM VM
-   */
-  private void validateRemotePartitionRegion(final VM vm) throws Exception {
-    vm.invoke("validateRemotePartitionRegion", () -> {
+  private void verifyRemotePartitionRegion(final VM managerVM) throws Exception {
+    managerVM.invoke("verifyRemotePartitionRegion", () -> {
       GemFireCacheImpl cache = GemFireCacheImpl.getInstance();
       Set<DistributedMember> otherMemberSet = cache.getDistributionManager().getOtherNormalDistributionManagerIds();
 
@@ -673,12 +626,8 @@ public class RegionManagementDUnitTest extends ManagementTestBase {
     });
   }
 
-
-  /**
-   * Invoked in member VMs
-   */
-  private void validateReplicateRegionAfterCreate(final VM memberVM) {
-    memberVM.invoke("Check Distributed region", () -> {
+  private void verifyReplicateRegionAfterCreate(final VM memberVM) {
+    memberVM.invoke("verifyReplicateRegionAfterCreate", () -> {
       GemFireCacheImpl cache = GemFireCacheImpl.getInstance();
       String memberId = MBeanJMXAdapter.getMemberNameOrId(cache.getDistributedSystem().getDistributedMember());
       ObjectName memberMBeanName = ObjectName.getInstance("GemFire:type=Member,member=" + memberId);
@@ -704,11 +653,8 @@ public class RegionManagementDUnitTest extends ManagementTestBase {
     });
   }
 
-  /**
-   * Invoked in managedNodes VMs
-   */
-  private void validatePartitionRegionAfterCreate(final VM vm) {
-    vm.invoke("validatePartitionRegionAfterCreate", () -> {
+  private void verifyPartitionRegionAfterCreate(final VM memberVM) {
+    memberVM.invoke("verifyPartitionRegionAfterCreate", () -> {
       GemFireCacheImpl cache = GemFireCacheImpl.getInstance();
       Region partitionedRegion = cache.getRegion(PARTITIONED_REGION_PATH);
 
@@ -719,11 +665,8 @@ public class RegionManagementDUnitTest extends ManagementTestBase {
     });
   }
 
-  /**
-   * Invoked in managedNode VMs
-   */
-  private void validateReplicatedRegionAfterClose(final VM vm) {
-    vm.invoke("validateReplicatedRegionAfterClose", () -> {
+  private void verifyReplicatedRegionAfterClose(final VM memberVM) {
+    memberVM.invoke("verifyReplicatedRegionAfterClose", () -> {
       SystemManagementService service = (SystemManagementService) getManagementService();
       RegionMXBean regionMXBean = service.getLocalRegionMBean(REGION_PATH);
       assertNull(regionMXBean);
@@ -734,29 +677,11 @@ public class RegionManagementDUnitTest extends ManagementTestBase {
     });
   }
 
-  /**
-   * Invoked in managedNode VMs
-   */
-  private void validatePartitionRegionAfterClose(final VM vm) {
-    vm.invoke("validatePartitionRegionAfterClose", () -> {
+  private void verifyPartitionRegionAfterClose(final VM memberVM) {
+    memberVM.invoke("verifyPartitionRegionAfterClose", () -> {
       ManagementService service = getManagementService();
       RegionMXBean bean = service.getLocalRegionMBean(PARTITIONED_REGION_PATH);
       assertNull(bean);
-    });
-  }
-
-  /**
-   * Invoked in member VMs
-   */
-  private void closeFixedPartitionRegion(final VM vm) {
-    vm.invoke("closeFixedPartitionRegion", () -> {
-      GemFireCacheImpl cache = GemFireCacheImpl.getInstance();
-      Region region = cache.getRegion(FIXED_PR_PATH);
-      region.close();
-
-      ManagementService service = getManagementService();
-      RegionMXBean regionMBean = service.getLocalRegionMBean(FIXED_PR_PATH);
-      assertNull(regionMBean);
     });
   }
 
