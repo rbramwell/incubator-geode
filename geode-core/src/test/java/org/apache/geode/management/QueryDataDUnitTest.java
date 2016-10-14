@@ -22,7 +22,6 @@ import static org.apache.geode.cache.FixedPartitionAttributes.*;
 import static org.apache.geode.cache.query.Utils.*;
 import static org.apache.geode.management.internal.ManagementConstants.*;
 import static org.apache.geode.management.internal.ManagementStrings.*;
-import static org.apache.geode.test.dunit.Host.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
@@ -58,19 +57,18 @@ import org.apache.geode.cache.PartitionResolver;
 import org.apache.geode.cache.Region;
 import org.apache.geode.cache.RegionFactory;
 import org.apache.geode.cache.RegionShortcut;
-import org.apache.geode.cache.query.data.Portfolio;
+import org.apache.geode.cache.query.data.Portfolio; // TODO
 import org.apache.geode.distributed.DistributedMember;
 import org.apache.geode.internal.cache.BucketRegion;
 import org.apache.geode.internal.cache.PartitionedRegion;
 import org.apache.geode.internal.cache.PartitionedRegionHelper;
-import org.apache.geode.internal.cache.partitioned.fixed.SingleHopQuarterPartitionResolver;
+import org.apache.geode.internal.cache.partitioned.fixed.SingleHopQuarterPartitionResolver; // TODO
 import org.apache.geode.management.internal.SystemManagementService;
 import org.apache.geode.management.internal.beans.BeanUtilFuncs;
 import org.apache.geode.management.internal.cli.json.TypedJson;
 import org.apache.geode.pdx.PdxInstance;
 import org.apache.geode.pdx.PdxInstanceFactory;
 import org.apache.geode.pdx.internal.PdxInstanceFactoryImpl;
-import org.apache.geode.test.dunit.AsyncInvocation;
 import org.apache.geode.test.dunit.VM;
 import org.apache.geode.test.dunit.rules.DistributedUseJacksonForJsonPathRule;
 import org.apache.geode.test.junit.categories.DistributedTest;
@@ -97,8 +95,8 @@ import org.apache.geode.test.junit.rules.serializable.SerializableTestName;
  * </pre>
  */
 @Category(DistributedTest.class)
-@SuppressWarnings("serial")
-public class QueryDataDUnitTest extends ManagementTestBase {
+@SuppressWarnings({ "serial", "unused" })
+public class QueryDataDUnitTest implements Serializable {
 
   private static final int NUM_OF_BUCKETS = 20;
 
@@ -152,21 +150,16 @@ public class QueryDataDUnitTest extends ManagementTestBase {
   public DistributedUseJacksonForJsonPathRule useJacksonForJsonPathRule = new DistributedUseJacksonForJsonPathRule();
 
   @Rule
+  public ManagementTestRule managementTestRule = ManagementTestRule.builder().managersFirst(false).start(true).build();
+
+  @Rule
   public SerializableTestName testName = new SerializableTestName();
 
   @Before
   public void before() throws Exception {
-    createMembersAndThenManager_tmp();
-
-    this.managerVM = getHost(0).getVM(0);
-    this.memberVMs = new VM[3];
-    this.memberVMs[0] = getHost(0).getVM(1);
-    this.memberVMs[1] = getHost(0).getVM(2);
-    this.memberVMs[2] = getHost(0).getVM(3);
-
-    this.member1 = getDistributedMember_tmp(this.memberVMs[0]);
-    this.member2 = getDistributedMember_tmp(this.memberVMs[1]);
-    this.member3 = getDistributedMember_tmp(this.memberVMs[2]);
+    this.member1 = this.managementTestRule.getDistributedMember(this.memberVMs[0]);
+    this.member2 = this.managementTestRule.getDistributedMember(this.memberVMs[1]);
+    this.member3 = this.managementTestRule.getDistributedMember(this.memberVMs[2]);
 
     createRegionsInNodes();
     generateValuesInRegions();
@@ -175,7 +168,7 @@ public class QueryDataDUnitTest extends ManagementTestBase {
   @Test
   public void testQueryOnPartitionedRegion() throws Exception {
     this.managerVM.invoke(this.testName.getMethodName(), () -> {
-      DistributedSystemMXBean distributedSystemMXBean = getSystemManagementService_tmp().getDistributedSystemMXBean();
+      DistributedSystemMXBean distributedSystemMXBean = this.managementTestRule.getSystemManagementService().getDistributedSystemMXBean();
 
       String jsonString = distributedSystemMXBean.queryData(QUERIES[0], null, 10);
       assertThat(jsonString).contains("result").doesNotContain("No Data Found");
@@ -202,7 +195,7 @@ public class QueryDataDUnitTest extends ManagementTestBase {
   @Test
   public void testQueryOnReplicatedRegion() throws Exception {
     this.managerVM.invoke(this.testName.getMethodName(), () -> {
-      DistributedSystemMXBean distributedSystemMXBean = getSystemManagementService_tmp().getDistributedSystemMXBean();
+      DistributedSystemMXBean distributedSystemMXBean = this.managementTestRule.getSystemManagementService().getDistributedSystemMXBean();
 
       String jsonString = distributedSystemMXBean.queryData(QUERIES_FOR_REPLICATED[0], null, 10);
       assertThat(jsonString).contains("result").doesNotContain("No Data Found");
@@ -217,7 +210,7 @@ public class QueryDataDUnitTest extends ManagementTestBase {
   @Test
   public void testMemberWise() throws Exception {
     this.managerVM.invoke(this.testName.getMethodName(), () -> {
-      DistributedSystemMXBean distributedSystemMXBean = getSystemManagementService_tmp().getDistributedSystemMXBean();
+      DistributedSystemMXBean distributedSystemMXBean = this.managementTestRule.getSystemManagementService().getDistributedSystemMXBean();
 
       byte[] bytes = distributedSystemMXBean.queryDataForCompressedResult(QUERIES_FOR_REPLICATED[0], member1.getId() + "," + member2.getId(), 2);
       String jsonString = BeanUtilFuncs.decompress(bytes);
@@ -231,7 +224,7 @@ public class QueryDataDUnitTest extends ManagementTestBase {
     this.memberVMs[0].invoke("putBigInstances", () -> putBigInstances(REPLICATE_REGION_NAME4));
 
     this.managerVM.invoke(this.testName.getMethodName(), () -> {
-      DistributedSystemMXBean distributedSystemMXBean = getSystemManagementService_tmp().getDistributedSystemMXBean();
+      DistributedSystemMXBean distributedSystemMXBean = this.managementTestRule.getSystemManagementService().getDistributedSystemMXBean();
 
       // Query With Default values
       assertThat(distributedSystemMXBean.getQueryCollectionsDepth()).isEqualTo(TypedJson.DEFAULT_COLLECTION_ELEMENT_LIMIT);
@@ -287,7 +280,7 @@ public class QueryDataDUnitTest extends ManagementTestBase {
   @Test
   public void testErrors() throws Exception {
     this.managerVM.invoke(this.testName.getMethodName(), () -> {
-      DistributedSystemMXBean distributedSystemMXBean = getSystemManagementService_tmp().getDistributedSystemMXBean();
+      DistributedSystemMXBean distributedSystemMXBean = this.managementTestRule.getSystemManagementService().getDistributedSystemMXBean();
 
       String invalidQuery = "SELECT * FROM " + PARTITIONED_REGION_NAME1;
       String invalidQueryResult = distributedSystemMXBean.queryData(invalidQuery, null, 2);
@@ -301,7 +294,7 @@ public class QueryDataDUnitTest extends ManagementTestBase {
       String regionName = this.testName.getMethodName() + "_REGION";
       String regionsNotFoundOnMembersQuery = "SELECT * FROM /" + regionName;
 
-      RegionFactory regionFactory = getCache_tmp().createRegionFactory(RegionShortcut.REPLICATE);
+      RegionFactory regionFactory = this.managementTestRule.getCache().createRegionFactory(RegionShortcut.REPLICATE);
       regionFactory.create(regionName);
 
       String regionsNotFoundOnMembersResult = distributedSystemMXBean.queryData(regionsNotFoundOnMembersQuery, member1.getId(), 2);
@@ -316,7 +309,7 @@ public class QueryDataDUnitTest extends ManagementTestBase {
   @Test
   public void testNormalRegions() throws Exception {
     this.managerVM.invoke(this.testName.getMethodName(), () -> {
-      DistributedSystemMXBean distributedSystemMXBean = getSystemManagementService_tmp().getDistributedSystemMXBean();
+      DistributedSystemMXBean distributedSystemMXBean = this.managementTestRule.getSystemManagementService().getDistributedSystemMXBean();
 
       String normalRegionName1 = this.testName.getMethodName() + "_NORMAL_REGION_1";
       String tempRegionName1 = this.testName.getMethodName() + "_TEMP_REGION_1";
@@ -324,7 +317,7 @@ public class QueryDataDUnitTest extends ManagementTestBase {
       String normalRegionName2 = this.testName.getMethodName() + "_NORMAL_REGION_2"; // to Reverse order of regions while getting Random region in QueryDataFunction [?]
       String tempRegionName2 = this.testName.getMethodName() + "_TEMP_REGION_2";
 
-      Cache cache = getCache_tmp();
+      Cache cache = this.managementTestRule.getCache();
 
       RegionFactory regionFactory = cache.createRegionFactory(RegionShortcut.LOCAL_HEAP_LRU);
       regionFactory.create(normalRegionName1);
@@ -366,7 +359,7 @@ public class QueryDataDUnitTest extends ManagementTestBase {
       }
       partitionAttributesFactory.setPartitionResolver(new SingleHopQuarterPartitionResolver());
 
-      RegionFactory regionFactory = getCache_tmp().createRegionFactory(RegionShortcut.PARTITION).setPartitionAttributes(partitionAttributesFactory.create());
+      RegionFactory regionFactory = this.managementTestRule.getCache().createRegionFactory(RegionShortcut.PARTITION).setPartitionAttributes(partitionAttributesFactory.create());
       Region region = regionFactory.create(partitionedRegionName);
 
       for (int i = 0; i < values1.length; i++) {
@@ -384,7 +377,7 @@ public class QueryDataDUnitTest extends ManagementTestBase {
       }
       partitionAttributesFactory.setPartitionResolver(new SingleHopQuarterPartitionResolver());
 
-      RegionFactory regionFactory = getCache_tmp().createRegionFactory(RegionShortcut.PARTITION).setPartitionAttributes(partitionAttributesFactory.create());
+      RegionFactory regionFactory = this.managementTestRule.getCache().createRegionFactory(RegionShortcut.PARTITION).setPartitionAttributes(partitionAttributesFactory.create());
       Region region = regionFactory.create(partitionedRegionName);
 
       for (int i = 0; i < values2.length; i++) {
@@ -402,7 +395,7 @@ public class QueryDataDUnitTest extends ManagementTestBase {
       }
       partitionAttributesFactory.setPartitionResolver(new SingleHopQuarterPartitionResolver());
 
-      RegionFactory regionFactory = getCache_tmp().createRegionFactory(RegionShortcut.PARTITION).setPartitionAttributes(partitionAttributesFactory.create());
+      RegionFactory regionFactory = this.managementTestRule.getCache().createRegionFactory(RegionShortcut.PARTITION).setPartitionAttributes(partitionAttributesFactory.create());
       regionFactory.create(partitionedRegionName);
     });
 
@@ -411,7 +404,7 @@ public class QueryDataDUnitTest extends ManagementTestBase {
     final List<String> member3RealData = this.memberVMs[2].invoke(() -> getLocalDataSet(partitionedRegionName));
 
     this.managerVM.invoke(this.testName.getMethodName(), () -> {
-      DistributedSystemMXBean distributedSystemMXBean = getSystemManagementService_tmp().getDistributedSystemMXBean();
+      DistributedSystemMXBean distributedSystemMXBean = this.managementTestRule.getSystemManagementService().getDistributedSystemMXBean();
       DistributedRegionMXBean distributedRegionMXBean = awaitDistributedRegionMXBean("/" + partitionedRegionName, 3);
 
       String alias = "Waiting for all entries to get reflected at managing node";
@@ -454,7 +447,7 @@ public class QueryDataDUnitTest extends ManagementTestBase {
   }
 
   private void putDataInRegion(final String regionName, final Object[] portfolio, final int from, final int to) {
-    Region region = getCache_tmp().getRegion(regionName);
+    Region region = this.managementTestRule.getCache().getRegion(regionName);
     for (int i = from; i < to; i++) {
       region.put(new Integer(i), portfolio[i]);
     }
@@ -485,7 +478,7 @@ public class QueryDataDUnitTest extends ManagementTestBase {
   }
 
   private void putPdxInstances(final String regionName) throws CacheException {
-    Region region = getCache_tmp().getRegion(regionName);
+    Region region = this.managementTestRule.getCache().getRegion(regionName);
 
     PdxInstanceFactory pdxInstanceFactory = PdxInstanceFactoryImpl.newCreator("Portfolio", false);
     pdxInstanceFactory.writeInt("ID", 111);
@@ -517,7 +510,7 @@ public class QueryDataDUnitTest extends ManagementTestBase {
   }
 
   private void putBigInstances(final String regionName) {
-    Region region = getCache_tmp().getRegion(regionName);
+    Region region = this.managementTestRule.getCache().getRegion(regionName);
 
     for (int i = 0; i < 1200; i++) {
       List<String> bigCollection = new ArrayList<>();
@@ -529,30 +522,24 @@ public class QueryDataDUnitTest extends ManagementTestBase {
   }
 
   private void createLocalRegion() {
-    getCache_tmp().createRegionFactory(RegionShortcut.LOCAL).create(LOCAL_REGION_NAME);
+    this.managementTestRule.getCache().createRegionFactory(RegionShortcut.LOCAL).create(LOCAL_REGION_NAME);
   }
 
   private void createReplicatedRegion() {
-    getCache_tmp().createRegionFactory(RegionShortcut.REPLICATE).create(REPLICATE_REGION_NAME1);
+    this.managementTestRule.getCache().createRegionFactory(RegionShortcut.REPLICATE).create(REPLICATE_REGION_NAME1);
   }
 
   private void createColocatedPR() {
     PartitionResolver testKeyBasedResolver = new TestPartitionResolver();
-    getCache_tmp().createRegionFactory(RegionShortcut.PARTITION).setPartitionAttributes(new PartitionAttributesFactory().setTotalNumBuckets(NUM_OF_BUCKETS).setPartitionResolver(testKeyBasedResolver).create()).create(PARTITIONED_REGION_NAME1);
-    getCache_tmp().createRegionFactory(RegionShortcut.PARTITION).setPartitionAttributes(new PartitionAttributesFactory().setTotalNumBuckets(NUM_OF_BUCKETS).setPartitionResolver(testKeyBasedResolver).setColocatedWith(PARTITIONED_REGION_NAME1).create()).create(PARTITIONED_REGION_NAME2);
-    getCache_tmp().createRegionFactory(RegionShortcut.PARTITION).setPartitionAttributes(new PartitionAttributesFactory().setTotalNumBuckets(NUM_OF_BUCKETS).setPartitionResolver(testKeyBasedResolver).setColocatedWith(PARTITIONED_REGION_NAME2).create()).create(PARTITIONED_REGION_NAME3);
-    getCache_tmp().createRegionFactory(RegionShortcut.PARTITION).setPartitionAttributes(new PartitionAttributesFactory().setTotalNumBuckets(NUM_OF_BUCKETS).setPartitionResolver(testKeyBasedResolver).create()).create(PARTITIONED_REGION_NAME4); // not collocated
-    getCache_tmp().createRegionFactory(RegionShortcut.PARTITION).setPartitionAttributes(new PartitionAttributesFactory().setTotalNumBuckets(NUM_OF_BUCKETS).setPartitionResolver(testKeyBasedResolver).setColocatedWith(PARTITIONED_REGION_NAME4).create()).create(PARTITIONED_REGION_NAME5); // collocated with 4
+    this.managementTestRule.getCache().createRegionFactory(RegionShortcut.PARTITION).setPartitionAttributes(new PartitionAttributesFactory().setTotalNumBuckets(NUM_OF_BUCKETS).setPartitionResolver(testKeyBasedResolver).create()).create(PARTITIONED_REGION_NAME1);
+    this.managementTestRule.getCache().createRegionFactory(RegionShortcut.PARTITION).setPartitionAttributes(new PartitionAttributesFactory().setTotalNumBuckets(NUM_OF_BUCKETS).setPartitionResolver(testKeyBasedResolver).setColocatedWith(PARTITIONED_REGION_NAME1).create()).create(PARTITIONED_REGION_NAME2);
+    this.managementTestRule.getCache().createRegionFactory(RegionShortcut.PARTITION).setPartitionAttributes(new PartitionAttributesFactory().setTotalNumBuckets(NUM_OF_BUCKETS).setPartitionResolver(testKeyBasedResolver).setColocatedWith(PARTITIONED_REGION_NAME2).create()).create(PARTITIONED_REGION_NAME3);
+    this.managementTestRule.getCache().createRegionFactory(RegionShortcut.PARTITION).setPartitionAttributes(new PartitionAttributesFactory().setTotalNumBuckets(NUM_OF_BUCKETS).setPartitionResolver(testKeyBasedResolver).create()).create(PARTITIONED_REGION_NAME4); // not collocated
+    this.managementTestRule.getCache().createRegionFactory(RegionShortcut.PARTITION).setPartitionAttributes(new PartitionAttributesFactory().setTotalNumBuckets(NUM_OF_BUCKETS).setPartitionResolver(testKeyBasedResolver).setColocatedWith(PARTITIONED_REGION_NAME4).create()).create(PARTITIONED_REGION_NAME5); // collocated with 4
   }
 
-  private AsyncInvocation createDistributedRegionAsync_tmp(final VM memberVM, final String regionName) {
-    return memberVM.invokeAsync("createDistributedRegionAsync_tmp", () -> {
-      getCache_tmp().createRegionFactory(RegionShortcut.REPLICATE).create(regionName);
-    });
-  }
-
-  private void createDistributedRegion_tmp(final VM memberVM, final String regionName) throws InterruptedException, TimeoutException, ExecutionException {
-    createDistributedRegionAsync_tmp(memberVM, regionName).await(2, MINUTES);
+  private void createDistributedRegion(final String regionName) {
+    this.managementTestRule.getCache().createRegionFactory(RegionShortcut.REPLICATE).create(regionName);
   }
 
   private void createRegionsInNodes() throws InterruptedException, TimeoutException, ExecutionException {
@@ -564,9 +551,9 @@ public class QueryDataDUnitTest extends ManagementTestBase {
     this.memberVMs[1].invoke(() -> createReplicatedRegion());
     this.memberVMs[2].invoke(() -> createReplicatedRegion());
 
-    createDistributedRegion_tmp(this.memberVMs[1], REPLICATE_REGION_NAME2);
-    createDistributedRegion_tmp(this.memberVMs[0], REPLICATE_REGION_NAME3);
-    createDistributedRegion_tmp(this.memberVMs[0], REPLICATE_REGION_NAME4);
+    this.memberVMs[1].invoke(() -> createDistributedRegion(REPLICATE_REGION_NAME2));
+    this.memberVMs[0].invoke(() -> createDistributedRegion(REPLICATE_REGION_NAME3));
+    this.memberVMs[0].invoke(() -> createDistributedRegion(REPLICATE_REGION_NAME4));
 
     // Create two co-located PartitionedRegions On Servers.
     this.memberVMs[0].invoke(() -> createColocatedPR());
@@ -587,8 +574,9 @@ public class QueryDataDUnitTest extends ManagementTestBase {
   }
 
   private List<String> getLocalDataSet(final String region) {
-    PartitionedRegion partitionedRegion = PartitionedRegionHelper.getPartitionedRegion(region, getCache_tmp());
+    PartitionedRegion partitionedRegion = PartitionedRegionHelper.getPartitionedRegion(region, this.managementTestRule.getCache());
     Set<BucketRegion> localPrimaryBucketRegions = partitionedRegion.getDataStore().getAllLocalPrimaryBucketRegions();
+
     List<String> allPrimaryValues = new ArrayList<>();
 
     for (BucketRegion bucketRegion : localPrimaryBucketRegions) {
@@ -620,28 +608,8 @@ public class QueryDataDUnitTest extends ManagementTestBase {
     return fixedPartitionAttributesList;
   }
 
-  private void createMembersAndThenManager_tmp() throws Exception {
-    initManagement(false);
-  }
-
-  private Cache getCache_tmp() {
-    return getCache();
-  }
-
-  private SystemManagementService getSystemManagementService_tmp() {
-    return (SystemManagementService) getManagementService();
-  }
-
-  private ManagementService getManagementService_tmp() {
-    return getManagementService();
-  }
-
-  private DistributedMember getDistributedMember_tmp(final VM memberVM) {
-    return getMember(memberVM);
-  }
-
   private MemberMXBean awaitMemberMXBeanProxy(final DistributedMember member) {
-    SystemManagementService service = getSystemManagementService_tmp();
+    SystemManagementService service = this.managementTestRule.getSystemManagementService();
     ObjectName objectName = service.getMemberMBeanName(member);
     String alias = "awaiting MemberMXBean proxy for " + member;
 
@@ -651,7 +619,7 @@ public class QueryDataDUnitTest extends ManagementTestBase {
   }
 
   private DistributedSystemMXBean awaitDistributedSystemMXBean() {
-    SystemManagementService service = getSystemManagementService_tmp();
+    SystemManagementService service = this.managementTestRule.getSystemManagementService();
 
     await().until(() -> assertThat(service.getDistributedSystemMXBean()).isNotNull());
 
@@ -659,7 +627,7 @@ public class QueryDataDUnitTest extends ManagementTestBase {
   }
 
   private DistributedRegionMXBean awaitDistributedRegionMXBean(final String name) {
-    SystemManagementService service = getSystemManagementService_tmp();
+    SystemManagementService service = this.managementTestRule.getSystemManagementService();
 
     await().until(() -> assertThat(service.getDistributedRegionMXBean(name)).isNotNull());
 
@@ -667,7 +635,7 @@ public class QueryDataDUnitTest extends ManagementTestBase {
   }
 
   private DistributedRegionMXBean awaitDistributedRegionMXBean(final String name, final int memberCount) {
-    SystemManagementService service = getSystemManagementService_tmp();
+    SystemManagementService service = this.managementTestRule.getSystemManagementService();
 
     await().until(() -> assertThat(service.getDistributedRegionMXBean(name)).isNotNull());
     await().until(() -> assertThat(service.getDistributedRegionMXBean(name).getMemberCount()).isEqualTo(memberCount));
@@ -683,7 +651,7 @@ public class QueryDataDUnitTest extends ManagementTestBase {
     return Awaitility.await(alias).atMost(2, MINUTES);
   }
 
-  private class TestPartitionResolver implements PartitionResolver {
+  private static class TestPartitionResolver implements PartitionResolver {
 
     @Override
     public void close() {
