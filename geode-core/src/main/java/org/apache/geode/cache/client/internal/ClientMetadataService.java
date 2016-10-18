@@ -453,19 +453,7 @@ public final class ClientMetadataService {
     this.setMetadataStable(false);
     region.getCachePerfStats().incNonSingleHopsCount();
     if (isRecursive) {
-      try {
-        getClientPRMetadata(region);
-      }
-      catch (VirtualMachineError e) {
-        SystemFailure.initiateFailure(e);
-        throw e;
-      }
-      catch (Throwable e) {
-        SystemFailure.checkFailure();
-        if (logger.isDebugEnabled()) {
-          logger.debug("An exception occurred while fetching metadata", e);
-        }
-      }
+      getClientPRMetadataForRegion(region);
     }
     else {
       synchronized (fetchTaskCountLock) {
