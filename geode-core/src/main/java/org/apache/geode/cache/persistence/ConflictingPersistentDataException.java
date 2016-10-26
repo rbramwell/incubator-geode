@@ -15,7 +15,6 @@
 package org.apache.geode.cache.persistence;
 
 import org.apache.geode.GemFireException;
-import org.apache.geode.admin.AdminDistributedSystem;
 
 /**
  * Thrown when a member with persistence is recovering, and it discovers that the data it has on

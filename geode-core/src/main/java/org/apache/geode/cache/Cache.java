@@ -33,6 +33,7 @@ import org.apache.geode.cache.wan.GatewaySenderFactory;
 import org.apache.geode.distributed.DistributedMember;
 import org.apache.geode.distributed.DistributedSystem;
 import org.apache.geode.i18n.LogWriterI18n;
+import org.apache.geode.internal.admin.api.AdminDistributedSystem;
 
 
 /**
@@ -273,12 +274,14 @@ public interface Cache extends GemFireCache {
    * @since GemFire 7.0
    */
   public GatewayConflictResolver getGatewayConflictResolver();
-
+  
   /**
-   * Sets whether or not this <code>Cache</code> resides in a long-running "cache server" VM. A
-   * cache server may be an application VM or may be a stand-along VM launched using
-   * {@linkplain org.apache.geode.admin.AdminDistributedSystem#addCacheServer administration API} or
-   * the <code>cacheserver</code> command line utility.
+   * Sets whether or not this <code>Cache</code> resides in a
+   * long-running "cache server" VM.  A cache server may be an
+   * application VM or may be a stand-along VM launched using {@linkplain
+   * AdminDistributedSystem#addCacheServer
+   * administration API} or the <code>cacheserver</code> command line
+   * utility.
    *
    * @since GemFire 4.0
    */

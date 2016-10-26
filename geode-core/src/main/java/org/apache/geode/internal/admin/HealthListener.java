@@ -15,12 +15,13 @@
 
 package org.apache.geode.internal.admin;
 
-import org.apache.geode.admin.GemFireHealth;
+import org.apache.geode.internal.admin.api.GemFireHealth;
+import org.apache.geode.internal.admin.api.GemFireHealthConfig;
 
 /**
  * Interface for those who want to be alerted of a change in a GemFireVM's health.
  *
- * @see org.apache.geode.admin.GemFireHealthConfig
+ * @see GemFireHealthConfig
  *
  * @since GemFire 3.5
  */

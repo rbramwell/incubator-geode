@@ -52,7 +52,7 @@ import org.apache.geode.StatisticsType;
 import org.apache.geode.StatisticsTypeFactory;
 import org.apache.geode.SystemConnectException;
 import org.apache.geode.SystemFailure;
-import org.apache.geode.admin.AlertLevel;
+import org.apache.geode.internal.admin.api.AlertLevel;
 import org.apache.geode.cache.CacheClosedException;
 import org.apache.geode.cache.CacheFactory;
 import org.apache.geode.cache.execute.internal.FunctionServiceManager;
@@ -73,6 +73,7 @@ import org.apache.geode.internal.DSFIDFactory;
 import org.apache.geode.internal.InternalDataSerializer;
 import org.apache.geode.internal.InternalInstantiator;
 import org.apache.geode.internal.SystemTimer;
+import org.apache.geode.internal.admin.api.AdminDistributedSystemFactory;
 import org.apache.geode.internal.admin.remote.DistributionLocatorId;
 import org.apache.geode.internal.cache.CacheConfig;
 import org.apache.geode.internal.cache.CacheServerImpl;
@@ -2964,8 +2965,7 @@ public class InternalDistributedSystem extends DistributedSystem
   }
 
   /**
-   * see {@link org.apache.geode.admin.AdminDistributedSystemFactory}
-   * 
+   * see {@link AdminDistributedSystemFactory}
    * @since GemFire 5.7
    */
   public static void setEnableAdministrationOnly(boolean adminOnly) {
