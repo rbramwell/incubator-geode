@@ -30,10 +30,12 @@ import org.apache.geode.internal.logging.log4j.LogMarker;
 public class ManagedEntityControllerFactory {
 
   private static final Logger logger = LogService.getLogger();
-  
-  private static final String ENABLED_MANAGED_ENTITY_CONTROLLER_CLASS_NAME = "EnabledManagedEntityController";
-  
-  static ManagedEntityController createManagedEntityController(final AdminDistributedSystem system) {
+
+  private static final String ENABLED_MANAGED_ENTITY_CONTROLLER_CLASS_NAME =
+      "EnabledManagedEntityController";
+
+  static ManagedEntityController createManagedEntityController(
+      final AdminDistributedSystem system) {
     if (isEnabledManagedEntityController()) {
       logger.info(LogMarker.CONFIG,
           "Local and remote OS command invocations are enabled for the Admin API.");

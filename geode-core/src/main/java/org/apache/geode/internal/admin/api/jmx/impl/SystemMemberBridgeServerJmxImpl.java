@@ -25,8 +25,7 @@ import javax.management.ObjectName;
 import javax.management.modelmbean.ModelMBean;
 
 /**
- * MBean representation of a {@link
- * SystemMemberBridgeServer}.
+ * MBean representation of a {@link SystemMemberBridgeServer}.
  *
  * @since GemFire 4.0
  */

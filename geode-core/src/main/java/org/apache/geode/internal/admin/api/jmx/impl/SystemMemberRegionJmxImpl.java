@@ -25,14 +25,11 @@ import javax.management.ObjectName;
 import javax.management.modelmbean.ModelMBean;
 
 /**
- * MBean representation of {@link 
- * SystemMemberRegion}.
+ * MBean representation of {@link SystemMemberRegion}.
  *
  * @since GemFire 3.5
  */
-public class SystemMemberRegionJmxImpl 
-extends SystemMemberRegionImpl
-implements ManagedResource {
+public class SystemMemberRegionJmxImpl extends SystemMemberRegionImpl implements ManagedResource {
 
   /** The object name of this managed resource */
   private ObjectName objectName;
@@ -47,17 +44,15 @@ implements ManagedResource {
    * @param cache the cache this region belongs to
    * @param region internal region to delegate real work to
    */
-  public SystemMemberRegionJmxImpl(SystemMemberCacheImpl cache, 
-                                   Region region)
-                            throws AdminException {
+  public SystemMemberRegionJmxImpl(SystemMemberCacheImpl cache, Region region)
+      throws AdminException {
     super(cache, region);
     initializeMBean(cache);
   }
 
   /** Create and register the MBean to manage this resource */
-  private void initializeMBean(SystemMemberCacheImpl cache)
-  throws AdminException {
-    
+  private void initializeMBean(SystemMemberCacheImpl cache) throws AdminException {
+
     GemFireVM vm = cache.getVM();
     this.mbeanName = new StringBuffer("GemFire.Cache:").append("path=")
         .append(MBeanUtil.makeCompliantMBeanNameProperty(getFullPath())).append(",name=")

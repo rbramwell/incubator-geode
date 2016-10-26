@@ -33,8 +33,7 @@ import java.util.List;
  *
  * @since GemFire 3.5
  */
-public class StatisticResourceImpl 
-implements StatisticResource {
+public class StatisticResourceImpl implements StatisticResource {
 
   /** The underlying remote StatResource which this object delegates to */
   protected StatResource statResource;
@@ -56,14 +55,12 @@ implements StatisticResource {
   /**
    * Constructs an instance of StatisticResourceImpl.
    *
-   * @param statResource  the admin StatResource to manage/monitor
-   * @param member        the SystemMember owning this resource
-   * @exception AdminException
-   *            if unable to create this StatisticResource for administration
+   * @param statResource the admin StatResource to manage/monitor
+   * @param member the SystemMember owning this resource
+   * @exception AdminException if unable to create this StatisticResource for administration
    */
-  public StatisticResourceImpl(StatResource statResource,
-                               SystemMember member)
-                        throws AdminException {
+  public StatisticResourceImpl(StatResource statResource, SystemMember member)
+      throws AdminException {
     this.statResource = statResource;
     this.member = member;
     this.name = this.statResource.getName();

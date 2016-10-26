@@ -24,8 +24,7 @@ import org.apache.geode.internal.admin.api.Statistic;
  * @since GemFire 3.5
  *
  */
-public class StatisticImpl
-implements Statistic {
+public class StatisticImpl implements Statistic {
 
   private static final long serialVersionUID = 3899296873901634399L;
 

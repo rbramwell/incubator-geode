@@ -41,47 +41,46 @@ public class ManagedResourceType implements java.io.Serializable {
   private static final long serialVersionUID = 3752874768667480449L;
 
   /** Agent managed resource type */
-  public static final ManagedResourceType AGENT = 
-      new ManagedResourceType("Agent", Agent.class);
+  public static final ManagedResourceType AGENT = new ManagedResourceType("Agent", Agent.class);
 
   /** DistributedSystem managed resource type */
-  public static final ManagedResourceType DISTRIBUTED_SYSTEM = 
+  public static final ManagedResourceType DISTRIBUTED_SYSTEM =
       new ManagedResourceType("AdminDistributedSystem", AdminDistributedSystem.class);
 
   /** SystemMember managed resource type */
-  public static final ManagedResourceType SYSTEM_MEMBER = 
+  public static final ManagedResourceType SYSTEM_MEMBER =
       new ManagedResourceType("SystemMember", SystemMember.class);
 
   /** SystemMemberCache managed resource type */
-  public static final ManagedResourceType SYSTEM_MEMBER_CACHE = 
+  public static final ManagedResourceType SYSTEM_MEMBER_CACHE =
       new ManagedResourceType("SystemMemberCache", SystemMemberCache.class);
 
   /** SystemMemberCache managed resource type */
-  public static final ManagedResourceType SYSTEM_MEMBER_REGION = 
+  public static final ManagedResourceType SYSTEM_MEMBER_REGION =
       new ManagedResourceType("SystemMemberRegion", SystemMemberRegion.class);
 
   /** SystemMemberCacheServer managed resource type */
-  public static final ManagedResourceType SYSTEM_MEMBER_CACHE_SERVER = 
+  public static final ManagedResourceType SYSTEM_MEMBER_CACHE_SERVER =
       new ManagedResourceType("SystemMemberCacheServer", SystemMemberCacheServer.class);
 
   /** CacheVm managed resource type */
-  public static final ManagedResourceType CACHE_VM = 
+  public static final ManagedResourceType CACHE_VM =
       new ManagedResourceType("CacheVm", CacheVm.class);
 
   /** StatisticResource managed resource type */
-  public static final ManagedResourceType STATISTIC_RESOURCE = 
+  public static final ManagedResourceType STATISTIC_RESOURCE =
       new ManagedResourceType("StatisticResource", StatisticResource.class);
 
-  public static final ManagedResourceType GEMFIRE_HEALTH = 
+  public static final ManagedResourceType GEMFIRE_HEALTH =
       new ManagedResourceType("GemFireHealth", GemFireHealth.class);
 
-  public static final ManagedResourceType DISTRIBUTED_SYSTEM_HEALTH_CONFIG = 
+  public static final ManagedResourceType DISTRIBUTED_SYSTEM_HEALTH_CONFIG =
       new ManagedResourceType("DistributedSystemHealthConfig", DistributedSystemHealthConfig.class);
 
-  public static final ManagedResourceType GEMFIRE_HEALTH_CONFIG = 
+  public static final ManagedResourceType GEMFIRE_HEALTH_CONFIG =
       new ManagedResourceType("GemFireHealthConfig", GemFireHealthConfig.class);
 
-  public static final ManagedResourceType DISTRIBUTION_LOCATOR = 
+  public static final ManagedResourceType DISTRIBUTION_LOCATOR =
       new ManagedResourceType("DistributionLocator", DistributionLocator.class);
 
   //////////////////// Instance Fields ////////////////////

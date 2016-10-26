@@ -176,9 +176,8 @@ public class ManagedEntityConfigXmlGenerator extends ManagedEntityConfigXml impl
   /**
    * Generates XML for a locator
    */
-  private void generateLocator(DistributionLocatorConfig config)
-    throws SAXException {
-    
+  private void generateLocator(DistributionLocatorConfig config) throws SAXException {
+
     AttributesImpl atts = new AttributesImpl();
     atts.addAttribute("", "", PORT, "", String.valueOf(config.getPort()));
 
@@ -192,8 +191,7 @@ public class ManagedEntityConfigXmlGenerator extends ManagedEntityConfigXml impl
   /**
    * Generates XML for attributes common to all managed entities.
    */
-  private void generateEntityConfig(ManagedEntityConfig config)
-    throws SAXException {
+  private void generateEntityConfig(ManagedEntityConfig config) throws SAXException {
 
     String host = config.getHost();
     if (host != null) {
@@ -291,8 +289,7 @@ public class ManagedEntityConfigXmlGenerator extends ManagedEntityConfigXml impl
   /**
    * Generates an XML representation of a <code>CacheServerConfig</code>.
    */
-  private void generateCacheServer(CacheServerConfig config)
-    throws SAXException {
+  private void generateCacheServer(CacheServerConfig config) throws SAXException {
 
     handler.startElement("", CACHE_SERVER, CACHE_SERVER, EMPTY);
 

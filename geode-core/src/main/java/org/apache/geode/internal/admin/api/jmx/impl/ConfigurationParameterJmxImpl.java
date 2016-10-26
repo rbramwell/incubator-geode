@@ -38,9 +38,8 @@ import org.apache.geode.internal.i18n.LocalizedStrings;
  * @since GemFire 3.5
  *
  */
-public class ConfigurationParameterJmxImpl
-extends ConfigurationParameterImpl
-implements Serializable {
+public class ConfigurationParameterJmxImpl extends ConfigurationParameterImpl
+    implements Serializable {
 
   private static final long serialVersionUID = -7822171853906772375L;
   private boolean deserialized = false;

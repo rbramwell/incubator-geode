@@ -45,9 +45,7 @@ import org.apache.geode.internal.i18n.LocalizedStrings;
  *
  * @since GemFire 3.5
  */
-public class SystemMemberCacheJmxImpl 
-extends SystemMemberCacheImpl
-implements ManagedResource {
+public class SystemMemberCacheJmxImpl extends SystemMemberCacheImpl implements ManagedResource {
 
   /** The object name of this managed resource */
   private ObjectName objectName;
@@ -67,22 +65,16 @@ implements ManagedResource {
    *
    * @param vm The vm owning the cache this object will manage
    */
-  public SystemMemberCacheJmxImpl(GemFireVM vm)
-  throws AdminException {
+  public SystemMemberCacheJmxImpl(GemFireVM vm) throws AdminException {
     super(vm);
     initializeMBean();
   }
 
   /** Create and register the MBean to manage this resource */
-  private void initializeMBean() 
-  throws AdminException {
-    this.mbeanName = new StringBuffer("GemFire.Cache:")
-        .append("name=")
-        .append(MBeanUtil.makeCompliantMBeanNameProperty(getName()))
-        .append(",id=")
-        .append(getId())
-        .append(",owner=")
-        .append(MBeanUtil.makeCompliantMBeanNameProperty(vm.getId().toString()))
+  private void initializeMBean() throws AdminException {
+    this.mbeanName = new StringBuffer("GemFire.Cache:").append("name=")
+        .append(MBeanUtil.makeCompliantMBeanNameProperty(getName())).append(",id=").append(getId())
+        .append(",owner=").append(MBeanUtil.makeCompliantMBeanNameProperty(vm.getId().toString()))
         .append(",type=Cache").toString();
 
     this.objectName =
@@ -102,8 +94,7 @@ implements ManagedResource {
    * @throws AdminException if constructing SystemMemberRegionJmxImpl instance fails
    */
   @Override
-  protected SystemMemberRegion createSystemMemberRegion(Region r)
-    throws AdminException {
+  protected SystemMemberRegion createSystemMemberRegion(Region r) throws AdminException {
     SystemMemberRegionJmxImpl managedSystemMemberRegion = null;
     boolean needsRefresh = false;
     synchronized (this.managedRegionResourcesMap) {
@@ -165,8 +156,7 @@ implements ManagedResource {
    * @return a new instance of ManagedBean copied from <code>managed</code> but with the new
    *         attributes added
    */
-  ManagedBean addDynamicAttributes(ManagedBean managed)
-  throws AdminException {
+  ManagedBean addDynamicAttributes(ManagedBean managed) throws AdminException {
     if (managed == null) {
       throw new IllegalArgumentException(
           LocalizedStrings.SystemMemberCacheJmxImpl_MANAGEDBEAN_IS_NULL.toLocalizedString());

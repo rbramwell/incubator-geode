@@ -254,11 +254,9 @@ public interface DistributedSystemConfig extends Cloneable {
   ////////////////////// Instance Methods //////////////////////
 
   /**
-   * Returns the name of the XML file that specifies the configuration
-   * of the {@linkplain ManagedEntity
-   * managed entities} administered by the
-   * <code>DistributedSystem</code>.  The XML file must conform to a
-   * <a href="doc-files/ds5_0.dtd">dtd</a>.
+   * Returns the name of the XML file that specifies the configuration of the
+   * {@linkplain ManagedEntity managed entities} administered by the <code>DistributedSystem</code>.
+   * The XML file must conform to a <a href="doc-files/ds5_0.dtd">dtd</a>.
    *
    * @since GemFire 4.0
    */

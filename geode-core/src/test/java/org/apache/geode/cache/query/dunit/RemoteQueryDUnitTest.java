@@ -279,64 +279,18 @@ public class RemoteQueryDUnitTest extends JUnit4CacheTestCase {
 
     // Execute client queries
     vm1.invoke(new CacheSerializableRunnable("Execute queries") {
-        public void run2() throws CacheException {
-          Region region = getRootRegion().getSubregion(name);
-          String queryString = null;
-          SelectResults results = null;
+      public void run2() throws CacheException {
+        Region region = getRootRegion().getSubregion(name);
+        String queryString = null;
+        SelectResults results = null;
 
-          queryString = "import org.apache.geode.query.dunit.RemoteQueryDUnitTest.TestObject; select distinct * from " + region.getFullPath();
-          try {
-            results = region.query(queryString);
-          } catch (Exception e) {
-            Assert.fail("Failed executing " + queryString, e);
-          }
-          assertEquals(numberOfEntries, results.size());
-          assertTrue(!results.getCollectionType().allowsDuplicates());
-
-          queryString = "import org.apache.geode.query.dunit.RemoteQueryDUnitTest.TestObject; select distinct * from " + region.getFullPath() + " where ticker = 'ibm'";
-          try {
-            results = region.query(queryString);
-          } catch (Exception e) {
-            Assert.fail("Failed executing " + queryString, e);
-          }
-          assertEquals(numberOfEntries, results.size());
-          assertTrue(!results.getCollectionType().allowsDuplicates());
-
-          queryString = "import org.apache.geode.query.dunit.RemoteQueryDUnitTest.TestObject; select distinct * from " + region.getFullPath() + " where ticker = 'IBM'";
-          try {
-            results = region.query(queryString);
-          } catch (Exception e) {
-            Assert.fail("Failed executing " + queryString, e);
-          }
-          assertEquals(0, results.size());
-          assertTrue(!results.getCollectionType().allowsDuplicates());
-
-          queryString = "import org.apache.geode.query.dunit.RemoteQueryDUnitTest.TestObject; select distinct * from " + region.getFullPath() + " where price > 49";
-          try {
-            results = region.query(queryString);
-          } catch (Exception e) {
-            Assert.fail("Failed executing " + queryString, e);
-          }
-          assertEquals(numberOfEntries/2, results.size());
-          assertTrue(!results.getCollectionType().allowsDuplicates());
-
-          queryString = "import org.apache.geode.query.dunit.RemoteQueryDUnitTest.TestObject; select distinct * from " + region.getFullPath() + " where price = 50";
-          try {
-            results = region.query(queryString);
-          } catch (Exception e) {
-            Assert.fail("Failed executing " + queryString, e);
-          }
-          assertEquals(1, results.size());
-          assertTrue(!results.getCollectionType().allowsDuplicates());
-
-          queryString = "import org.apache.geode.query.dunit.RemoteQueryDUnitTest.TestObject; select distinct * from " + region.getFullPath() + " where ticker = 'ibm' and price = 50";
-          try {
-            results = region.query(queryString);
-          } catch (Exception e) {
-            Assert.fail("Failed executing " + queryString, e);
-          }
-          assertEquals(1, results.size());
-          assertTrue(!results.getCollectionType().allowsDuplicates());
+        queryString =
+            "import org.apache.geode.admin.RemoteQueryDUnitTest.TestObject; select distinct * from "
+                + region.getFullPath();
+        try {
+          results = region.query(queryString);
+        } catch (Exception e) {
+          Assert.fail("Failed executing " + queryString, e);
         }
         assertEquals(numberOfEntries, results.size());
         assertTrue(!results.getCollectionType().allowsDuplicates());
@@ -466,64 +420,66 @@ public class RemoteQueryDUnitTest extends JUnit4CacheTestCase {
 
     // Execute client queries
     vm1.invoke(new CacheSerializableRunnable("Execute queries") {
-        public void run2() throws CacheException {
-          Region region = getRootRegion().getSubregion(name);
-          String queryString = null;
-          SelectResults results = null;
+      public void run2() throws CacheException {
+        Region region = getRootRegion().getSubregion(name);
+        String queryString = null;
+        SelectResults results = null;
 
-          queryString = "import org.apache.geode.query.dunit.RemoteQueryDUnitTest.TestObject; select distinct ticker, price from " + region.getFullPath();
-          try {
-            results = region.query(queryString);
-          } catch (Exception e) {
-            Assert.fail("Failed executing " + queryString, e);
-          }
-          assertEquals(numberOfEntries, results.size());
-          assertTrue(!results.getCollectionType().allowsDuplicates() && results.getCollectionType().getElementType().isStructType());
+        queryString =
+            "import org.apache.geode.admin.RemoteQueryDUnitTest.TestObject; select distinct ticker, price from "
+                + region.getFullPath();
+        try {
+          results = region.query(queryString);
+        } catch (Exception e) {
+          Assert.fail("Failed executing " + queryString, e);
+        }
+        assertEquals(numberOfEntries, results.size());
+        assertTrue(!results.getCollectionType().allowsDuplicates()
+            && results.getCollectionType().getElementType().isStructType());
 
-          queryString = "import org.apache.geode.query.dunit.RemoteQueryDUnitTest.TestObject; select distinct ticker, price from " + region.getFullPath() + " where ticker = 'ibm'";
-          try {
-            results = region.query(queryString);
-          } catch (Exception e) {
-            Assert.fail("Failed executing " + queryString, e);
-          }
-          assertEquals(numberOfEntries, results.size());
-          assertTrue(!results.getCollectionType().allowsDuplicates() && results.getCollectionType().getElementType().isStructType());
+        queryString =
+            "import org.apache.geode.admin.RemoteQueryDUnitTest.TestObject; select distinct ticker, price from "
+                + region.getFullPath() + " where ticker = 'ibm'";
+        try {
+          results = region.query(queryString);
+        } catch (Exception e) {
+          Assert.fail("Failed executing " + queryString, e);
+        }
+        assertEquals(numberOfEntries, results.size());
+        assertTrue(!results.getCollectionType().allowsDuplicates()
+            && results.getCollectionType().getElementType().isStructType());
 
-          queryString = "import org.apache.geode.query.dunit.RemoteQueryDUnitTest.TestObject; select distinct ticker, price from " + region.getFullPath() + " where ticker = 'IBM'";
-          try {
-            results = region.query(queryString);
-          } catch (Exception e) {
-            Assert.fail("Failed executing " + queryString, e);
-          }
-          assertEquals(0, results.size());
-          assertTrue(!results.getCollectionType().allowsDuplicates() && results.getCollectionType().getElementType().isStructType());
+        queryString =
+            "import org.apache.geode.admin.RemoteQueryDUnitTest.TestObject; select distinct ticker, price from "
+                + region.getFullPath() + " where ticker = 'IBM'";
+        try {
+          results = region.query(queryString);
+        } catch (Exception e) {
+          Assert.fail("Failed executing " + queryString, e);
+        }
+        assertEquals(0, results.size());
+        assertTrue(!results.getCollectionType().allowsDuplicates()
+            && results.getCollectionType().getElementType().isStructType());
 
-          queryString = "import org.apache.geode.query.dunit.RemoteQueryDUnitTest.TestObject; select distinct ticker, price from " + region.getFullPath() + " where price > 49";
-          try {
-            results = region.query(queryString);
-          } catch (Exception e) {
-            Assert.fail("Failed executing " + queryString, e);
-          }
-          assertEquals(numberOfEntries/2, results.size());
-          assertTrue(!results.getCollectionType().allowsDuplicates() && results.getCollectionType().getElementType().isStructType());
+        queryString =
+            "import org.apache.geode.admin.RemoteQueryDUnitTest.TestObject; select distinct ticker, price from "
+                + region.getFullPath() + " where price > 49";
+        try {
+          results = region.query(queryString);
+        } catch (Exception e) {
+          Assert.fail("Failed executing " + queryString, e);
+        }
+        assertEquals(numberOfEntries / 2, results.size());
+        assertTrue(!results.getCollectionType().allowsDuplicates()
+            && results.getCollectionType().getElementType().isStructType());
 
-          queryString = "import org.apache.geode.query.dunit.RemoteQueryDUnitTest.TestObject; select distinct ticker, price from " + region.getFullPath() + " where price = 50";
-          try {
-            results = region.query(queryString);
-          } catch (Exception e) {
-            Assert.fail("Failed executing " + queryString, e);
-          }
-          assertEquals(1, results.size());
-          assertTrue(!results.getCollectionType().allowsDuplicates() && results.getCollectionType().getElementType().isStructType());
-
-          queryString = "import org.apache.geode.query.dunit.RemoteQueryDUnitTest.TestObject; select distinct ticker, price from " + region.getFullPath() + " where ticker = 'ibm' and price = 50";
-          try {
-            results = region.query(queryString);
-          } catch (Exception e) {
-            Assert.fail("Failed executing " + queryString, e);
-          }
-          assertEquals(1, results.size());
-          assertTrue(!results.getCollectionType().allowsDuplicates() && results.getCollectionType().getElementType().isStructType());
+        queryString =
+            "import org.apache.geode.admin.RemoteQueryDUnitTest.TestObject; select distinct ticker, price from "
+                + region.getFullPath() + " where price = 50";
+        try {
+          results = region.query(queryString);
+        } catch (Exception e) {
+          Assert.fail("Failed executing " + queryString, e);
         }
         assertEquals(1, results.size());
         assertTrue(!results.getCollectionType().allowsDuplicates()

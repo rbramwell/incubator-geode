@@ -18,8 +18,7 @@ import org.apache.geode.internal.admin.Alert;
 import org.apache.geode.internal.i18n.LocalizedStrings;
 
 /**
- * Type-safe enumeration for {@link org.apache.geode.internal.admin.api.Alert
- * Alert} level.
+ * Type-safe enumeration for {@link org.apache.geode.internal.admin.api.Alert Alert} level.
  *
  * @since GemFire 3.5
  * @deprecated as of 7.0 use the <code><a href=

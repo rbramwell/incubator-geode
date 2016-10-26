@@ -46,8 +46,7 @@ import java.util.*;
  *
  * @since GemFire 3.5
  */
-public class SystemMemberImpl 
-implements SystemMember, ConfigurationParameterListener {
+public class SystemMemberImpl implements SystemMember, ConfigurationParameterListener {
 
   private static final Logger logger = LogService.getLogger();
 
@@ -211,8 +210,7 @@ implements SystemMember, ConfigurationParameterListener {
     return vm.getVersionInfo();
   }
 
-  public StatisticResource[] getStat(String statisticsTypeName)
-  throws AdminException {
+  public StatisticResource[] getStat(String statisticsTypeName) throws AdminException {
     StatisticResource[] res = new StatisticResource[0];
     if (this.vm != null) {
       res = getStatsImpl(this.vm.getStats(statisticsTypeName));
@@ -220,8 +218,7 @@ implements SystemMember, ConfigurationParameterListener {
     return res.length == 0 ? null : res;
   }
 
-  public StatisticResource[] getStats() 
-  throws AdminException {
+  public StatisticResource[] getStats() throws AdminException {
     StatisticResource[] statsImpl = new StatisticResource[0];
     if (this.vm != null) {
       statsImpl = getStatsImpl(this.vm.getStats(null));
@@ -239,9 +236,7 @@ implements SystemMember, ConfigurationParameterListener {
     }
   }
 
-  public final SystemMemberCache getCache()
-    throws AdminException
-  {
+  public final SystemMemberCache getCache() throws AdminException {
     GemFireVM vm = getGemFireVM(); // fix for bug 33505
     if (vm == null)
       return null;
@@ -255,9 +250,8 @@ implements SystemMember, ConfigurationParameterListener {
       return null;
     }
   }
-  
-  public void refreshConfig() 
-  throws AdminException {
+
+  public void refreshConfig() throws AdminException {
     GemFireVM vm = getGemFireVM();
     if (vm == null)
       return;
@@ -268,8 +262,7 @@ implements SystemMember, ConfigurationParameterListener {
    * Sets the value of this system member's distribution-related configuration based on the given
    * <code>Config</code> object.
    */
-  public final void refreshConfig(Config config) 
-  throws AdminException {
+  public final void refreshConfig(Config config) throws AdminException {
     if (config == null) {
       throw new AdminException(
           LocalizedStrings.SystemMemberImpl_FAILED_TO_REFRESH_CONFIGURATION_PARAMETERS_FOR_0
@@ -332,11 +325,11 @@ implements SystemMember, ConfigurationParameterListener {
   // -------------------------------------------------------------------------
   // Listener callbacks
   // -------------------------------------------------------------------------
-  
+
   // -- ConfigurationParameterListener ---
   public void configurationParameterValueChanged(ConfigurationParameter parm) {
     try {
-      setConfiguration(new ConfigurationParameter[] { parm });
+      setConfiguration(new ConfigurationParameter[] {parm});
     } catch (AdminException e) {
       // this shouldn't occur since this is a config listener method...
       logger.warn(e.getMessage(), e);
@@ -441,8 +434,7 @@ implements SystemMember, ConfigurationParameterListener {
    * @param stat the internal stat resource to wrap with {@link StatisticResource}
    * @return new impl instance of {@link StatisticResource}
    */
-  protected StatisticResource createStatisticResource(StatResource stat)
-  throws AdminException {
+  protected StatisticResource createStatisticResource(StatResource stat) throws AdminException {
     return new StatisticResourceImpl(stat, this);
   }
 
@@ -467,15 +459,12 @@ implements SystemMember, ConfigurationParameterListener {
    * @param vm the GemFire vm to retrieve cache info from
    * @return new impl instance of {@link SystemMemberCache}
    */
-  protected SystemMemberCache createSystemMemberCache(GemFireVM vm)
-    throws AdminException
-  {
+  protected SystemMemberCache createSystemMemberCache(GemFireVM vm) throws AdminException {
     return new SystemMemberCacheImpl(vm);
   }
 
   /** Wrap the internal stats with impls of {@link StatisticResource} */
-  protected StatisticResource[] getStatsImpl(StatResource[] stats)
-  throws AdminException {
+  protected StatisticResource[] getStatsImpl(StatResource[] stats) throws AdminException {
     List statList = new ArrayList();
     for (int i = 0; i < stats.length; i++) {
       statList.add(createStatisticResource(stats[i]));

@@ -81,8 +81,9 @@ public class AdminDistributedSystemFactory {
    * colocated distributed system.
    * <p>
    * Once it has been enabled be careful to only use GemFire APIs from the
-   * <code>org.apache.geode.internal.admin</code> package. In particular do not create
-   * a {@link org.apache.geode.cache.Cache} or a normal {@link DistributedSystem}.
+   * <code>org.apache.geode.internal.admin</code> package. In particular do not create a
+   * {@link org.apache.geode.cache.Cache} or a normal {@link DistributedSystem}.
+   * 
    * @param adminOnly <code>true</code> if this VM should be limited to administration APIs;
    *        <code>false</code> if this VM should allow all GemFire APIs.
    * @throws IllegalStateException if a {@link DistributedSystem} or {@link AdminDistributedSystem}

@@ -44,10 +44,9 @@ public interface AdminDistributedSystem {
   public String getId();
 
   /**
-   * Retrieves display friendly name for this system.  If this administrative
-   * VM defined an optional name for its connection to the distributed system,
-   * that name will be returned.  Otherwise the returned value will be {@link
-   * AdminDistributedSystem#getId}.
+   * Retrieves display friendly name for this system. If this administrative VM defined an optional
+   * name for its connection to the distributed system, that name will be returned. Otherwise the
+   * returned value will be {@link AdminDistributedSystem#getId}.
    */
   public String getName();
 
@@ -184,8 +183,7 @@ public interface AdminDistributedSystem {
    * to this system. Note that this list does not include dedicated {@linkplain #getCacheVms cache
    * server vms}.
    */
-  public SystemMember[] getSystemMemberApplications() 
-  throws AdminException;
+  public SystemMember[] getSystemMemberApplications() throws AdminException;
 
   /**
    * Display in readable format the latest Alert in this distributed system.

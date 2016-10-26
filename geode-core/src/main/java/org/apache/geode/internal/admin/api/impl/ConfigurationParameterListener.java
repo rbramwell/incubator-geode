@@ -17,10 +17,8 @@ package org.apache.geode.internal.admin.api.impl;
 import org.apache.geode.internal.admin.api.ConfigurationParameter;
 
 /**
- * Listens to value changes of a 
- * {@link ConfigurationParameter}.  This is for
- * internal use only to allow a {@link SystemMemberImpl} to keep track of 
- * configuration changes made through 
+ * Listens to value changes of a {@link ConfigurationParameter}. This is for internal use only to
+ * allow a {@link SystemMemberImpl} to keep track of configuration changes made through
  * {@link ConfigurationParameterImpl#setValue}.
  *
  * @since GemFire 3.5

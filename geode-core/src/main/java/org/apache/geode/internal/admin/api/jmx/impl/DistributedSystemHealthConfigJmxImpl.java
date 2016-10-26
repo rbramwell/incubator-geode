@@ -30,9 +30,8 @@ import javax.management.modelmbean.*;
  *
  * @since GemFire 3.5
  */
-public class DistributedSystemHealthConfigJmxImpl
-  extends DistributedSystemHealthConfigImpl
-  implements ManagedResource {
+public class DistributedSystemHealthConfigJmxImpl extends DistributedSystemHealthConfigImpl
+    implements ManagedResource {
 
   /** The <code>GemFireHealth</code> that we help configure */
   private GemFireHealth health;

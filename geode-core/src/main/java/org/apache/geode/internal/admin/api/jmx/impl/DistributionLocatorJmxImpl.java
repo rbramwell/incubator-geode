@@ -25,10 +25,8 @@ import javax.management.modelmbean.ModelMBean;
  * Provides MBean support for managing a distribution locator.
  *
  */
-public class DistributionLocatorJmxImpl 
-extends DistributionLocatorImpl
-implements ManagedResource,
-           DistributionLocatorConfig {
+public class DistributionLocatorJmxImpl extends DistributionLocatorImpl
+    implements ManagedResource, DistributionLocatorConfig {
 
   /** The JMX object name of this managed resource */
   private ObjectName objectName;

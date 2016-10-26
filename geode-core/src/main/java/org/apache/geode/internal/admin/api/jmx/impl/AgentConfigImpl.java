@@ -1489,10 +1489,8 @@ public class AgentConfigImpl extends DistributedSystemConfigImpl implements Agen
   // HttpAdaptor property validators...
 
   /**
-   * Returns {@link
-   * AgentConfig#DEFAULT_HTTP_PORT}
-   * if httpPort is empty; else validates
-   * that it's an integer and returns the int form.
+   * Returns {@link AgentConfig#DEFAULT_HTTP_PORT} if httpPort is empty; else validates that it's an
+   * integer and returns the int form.
    */
   private int validateHttpPort(String val) {
     if (isEmpty(val)) {
@@ -1503,9 +1501,8 @@ public class AgentConfigImpl extends DistributedSystemConfigImpl implements Agen
   }
 
   /**
-   * Validates that httpPort is either zero or within the {@link
-   * AgentConfig#MIN_HTTP_PORT} and {@link
-   * AgentConfig#MAX_HTTP_PORT} values.
+   * Validates that httpPort is either zero or within the {@link AgentConfig#MIN_HTTP_PORT} and
+   * {@link AgentConfig#MAX_HTTP_PORT} values.
    */
   private int validateHttpPort(int val) {
     if (val < 0 || val > MAX_HTTP_PORT) {
@@ -1518,9 +1515,7 @@ public class AgentConfigImpl extends DistributedSystemConfigImpl implements Agen
   }
 
   /**
-   * Returns {@link
-   * AgentConfig#DEFAULT_HTTP_BIND_ADDRESS}
-   * unless httpBindAddress can be used to
+   * Returns {@link AgentConfig#DEFAULT_HTTP_BIND_ADDRESS} unless httpBindAddress can be used to
    * create a valid InetAddress.
    */
   private String validateHttpBindAddress(String val) {
@@ -1546,9 +1541,7 @@ public class AgentConfigImpl extends DistributedSystemConfigImpl implements Agen
   // SnmpAdaptor property validators...
 
   /**
-   * Returns {@link
-   * AgentConfig#DEFAULT_SNMP_BIND_ADDRESS}
-   * unless snmpBindAddress can be used to
+   * Returns {@link AgentConfig#DEFAULT_SNMP_BIND_ADDRESS} unless snmpBindAddress can be used to
    * create a valid InetAddress.
    */
   private String validateSnmpBindAddress(String val) {
@@ -1589,9 +1582,8 @@ public class AgentConfigImpl extends DistributedSystemConfigImpl implements Agen
   // RMIConnectorServer property validators...
 
   /**
-   * Returns {@link AgentConfig#DEFAULT_RMI_PORT}
-   * if rmiPort is empty; else validates
-   * that it's an integer and returns the int form.
+   * Returns {@link AgentConfig#DEFAULT_RMI_PORT} if rmiPort is empty; else validates that it's an
+   * integer and returns the int form.
    */
   private int validateRmiPort(String val) {
     if (isEmpty(val)) {
@@ -1602,10 +1594,8 @@ public class AgentConfigImpl extends DistributedSystemConfigImpl implements Agen
   }
 
   /**
-   * Validates that rmiPort is either zero or within the {@link
-   * AgentConfig#MIN_RMI_PORT}
-   * and {@link AgentConfig#MAX_RMI_PORT}
-   * values.
+   * Validates that rmiPort is either zero or within the {@link AgentConfig#MIN_RMI_PORT} and
+   * {@link AgentConfig#MAX_RMI_PORT} values.
    */
   private int validateRmiPort(int val) {
     if (val < MIN_RMI_PORT || val > MAX_RMI_PORT) {
@@ -1618,9 +1608,8 @@ public class AgentConfigImpl extends DistributedSystemConfigImpl implements Agen
   }
 
   /**
-   * Returns {@link AgentConfig#DEFAULT_RMI_SERVER_PORT}
-   * if rmi-server-port is empty; else validates that it's an integer within the
-   * allowed range and returns the int form.
+   * Returns {@link AgentConfig#DEFAULT_RMI_SERVER_PORT} if rmi-server-port is empty; else validates
+   * that it's an integer within the allowed range and returns the int form.
    */
   private int validateRmiServerPort(String val) {
     if (isEmpty(val)) {
@@ -1631,10 +1620,8 @@ public class AgentConfigImpl extends DistributedSystemConfigImpl implements Agen
   }
 
   /**
-   * Validates that rmiPort is either zero or within the {@link
-   * AgentConfig#MIN_RMI_PORT}
-   * and {@link AgentConfig#MAX_RMI_PORT}
-   * values.
+   * Validates that rmiPort is either zero or within the {@link AgentConfig#MIN_RMI_PORT} and
+   * {@link AgentConfig#MAX_RMI_PORT} values.
    */
   private int validateRmiServerPort(int val) {
     if (val < MIN_RMI_PORT || val > MAX_RMI_PORT) {
@@ -1647,10 +1634,8 @@ public class AgentConfigImpl extends DistributedSystemConfigImpl implements Agen
   }
 
   /**
-   * Returns {@link
-   * AgentConfig#DEFAULT_RMI_BIND_ADDRESS}
-   * unless rmiBindAddress can be used to create a
-   * valid InetAddress.
+   * Returns {@link AgentConfig#DEFAULT_RMI_BIND_ADDRESS} unless rmiBindAddress can be used to
+   * create a valid InetAddress.
    */
   private String validateRmiBindAddress(String val) {
     String value = InetAddressUtil.validateHost(val);

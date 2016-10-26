@@ -83,10 +83,10 @@ public class MemberInfoWithStatsMBean extends AbstractDynamicMBean implements No
   private ObjectName objectName;
 
   /** version of the GemFire Enterprise system that is running */
-  private String                        version;
-  private int                           refreshInterval;
-  private String                        id;
-  
+  private String version;
+  private int refreshInterval;
+  private String id;
+
   private Agent agent;
   private AdminDistributedSystemJmxImpl adminDSJmx;
 
@@ -98,7 +98,7 @@ public class MemberInfoWithStatsMBean extends AbstractDynamicMBean implements No
    * 
    * @param agent Admin Agent instance
    * @throws OperationsException if ObjectName can't be formed for this MBean
-   * @throws MBeanRegistrationException 
+   * @throws MBeanRegistrationException
    * @throws AdminException
    */
   MemberInfoWithStatsMBean(Agent agent)

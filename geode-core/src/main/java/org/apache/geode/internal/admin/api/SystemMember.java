@@ -37,12 +37,11 @@ public interface SystemMember {
    * {@link #getDistributedMember}. For cache servers it is a unique cache server string.
    */
   public String getId();
-  
-  /** 
-   * Retrieves display friendly name for this member.  If this member defined 
-   * an optional name for its connection to the distributed system, that name 
-   * will be returned.  Otherwise the returned value will be {@link
-   * SystemMember#getId}.
+
+  /**
+   * Retrieves display friendly name for this member. If this member defined an optional name for
+   * its connection to the distributed system, that name will be returned. Otherwise the returned
+   * value will be {@link SystemMember#getId}.
    *
    * @see org.apache.geode.distributed.DistributedSystem#connect
    * @see org.apache.geode.distributed.DistributedSystem#getName
@@ -85,47 +84,46 @@ public interface SystemMember {
    *
    * @param parms subset of the configuration parameters to be changed
    * @return all configuration parameters including those that were changed
-   * @throws AdminException
-   *         if this fails to make the configuration changes
+   * @throws AdminException if this fails to make the configuration changes
    */
-  public ConfigurationParameter[] setConfiguration(ConfigurationParameter[] parms) throws AdminException;
-  
+  public ConfigurationParameter[] setConfiguration(ConfigurationParameter[] parms)
+      throws AdminException;
+
   /** Refreshes this member's configuration from the member or it's properties */
   public void refreshConfig() throws AdminException;
-  
-  /** 
-   * Retrieves this members statistic resources. If the member is not running 
-   * then an empty array is returned. 
+
+  /**
+   * Retrieves this members statistic resources. If the member is not running then an empty array is
+   * returned.
    *
    * @param statisticsTypeName String ame of the Statistics Type
    * @return array of runtime statistic resources owned by this member
    * @since GemFire 5.7
    */
   public StatisticResource[] getStat(String statisticsTypeName) throws AdminException;
-  
-  /** 
-   * Retrieves this members statistic resources. If the member is not running 
-   * then an empty array is returned. All Stats are returned
+
+  /**
+   * Retrieves this members statistic resources. If the member is not running then an empty array is
+   * returned. All Stats are returned
    *
    * @return array of runtime statistic resources owned by this member
    */
   public StatisticResource[] getStats() throws AdminException;
-  
+
   /**
    * Returns whether or not this system member hosts a GemFire {@link org.apache.geode.cache.Cache
    * Cache}.
    *
    * @see #getCache
    */
-  public boolean hasCache()
-    throws AdminException;
+  public boolean hasCache() throws AdminException;
 
   /**
    * Returns an object that provides admin access to this member's cache. If the member currently
    * has no cache then <code>null</code> is returned.
    */
   public SystemMemberCache getCache() throws AdminException;
-  
+
   /**
    * Returns the names of the membership roles filled by this member.
    *

@@ -74,10 +74,9 @@ import static org.apache.geode.distributed.ConfigurationProperties.*;
  * @since GemFire 3.5
  */
 public class AdminDistributedSystemImpl
-implements AdminDistributedSystem,
-           org.apache.geode.internal.admin.JoinLeaveListener,
-           org.apache.geode.internal.admin.AlertListener,
-           org.apache.geode.distributed.internal.InternalDistributedSystem.DisconnectListener {
+    implements AdminDistributedSystem, org.apache.geode.internal.admin.JoinLeaveListener,
+    org.apache.geode.internal.admin.AlertListener,
+    org.apache.geode.distributed.internal.InternalDistributedSystem.DisconnectListener {
 
   private static final Logger logger = LogService.getLogger();
 
@@ -239,9 +238,8 @@ implements AdminDistributedSystem,
   }
 
   /**
-   * Creates <code>CacheServer</code> instances for every cache server
-   * entry in the {@link
-   * DistributedSystemConfig}
+   * Creates <code>CacheServer</code> instances for every cache server entry in the
+   * {@link DistributedSystemConfig}
    */
   private void initializeCacheServers() {
     CacheServerConfig[] cacheServerConfigs = this.config.getCacheServerConfigs();
@@ -647,9 +645,8 @@ implements AdminDistributedSystem,
    *
    * @return array of system members for each non-manager member
    */
-  public SystemMember[] getSystemMemberApplications()
-  throws AdminException {
-    synchronized(this.applicationSet) {
+  public SystemMember[] getSystemMemberApplications() throws AdminException {
+    synchronized (this.applicationSet) {
       Collection coll = new ArrayList(this.applicationSet.size());
       APPS: for (Iterator iter = this.applicationSet.iterator(); iter.hasNext();) {
         Future future = (Future) iter.next();
@@ -1247,8 +1244,7 @@ implements AdminDistributedSystem,
    * 
    * @throws AdminException TODO-javadocs
    */
-  protected SystemMember createSystemMember(ApplicationVM app)
-  throws AdminException {
+  protected SystemMember createSystemMember(ApplicationVM app) throws AdminException {
     return new SystemMemberImpl(this, app);
   }
 
@@ -1259,12 +1255,11 @@ implements AdminDistributedSystem,
    * @param member InternalDistributedMember instance for which a SystemMember instance is to be
    *        constructed.
    * @return constructed SystemMember instance
-   * @throws AdminException
-   *           if construction of SystemMember instance fails
+   * @throws AdminException if construction of SystemMember instance fails
    * @since GemFire 6.5
    */
   protected SystemMember createSystemMember(InternalDistributedMember member)
-    throws AdminException {
+      throws AdminException {
     return new SystemMemberImpl(this, member);
   }
 

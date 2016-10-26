@@ -21,8 +21,8 @@ import org.apache.geode.internal.admin.api.GemFireMemberStatus;
 import java.io.*;
 
 /**
- * A message that is sent to a particular distribution manager to get its
- * current {@link GemFireMemberStatus}
+ * A message that is sent to a particular distribution manager to get its current
+ * {@link GemFireMemberStatus}
  * 
  */
 public class RefreshMemberSnapshotRequest extends AdminRequest {

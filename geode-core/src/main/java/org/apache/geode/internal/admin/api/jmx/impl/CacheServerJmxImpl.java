@@ -50,8 +50,7 @@ import org.apache.geode.internal.i18n.LocalizedStrings;
 import org.apache.geode.internal.logging.LogService;
 
 /**
- * MBean representation of a {@link
- * CacheVm}.
+ * MBean representation of a {@link CacheVm}.
  *
  * @since GemFire 4.0
  */
@@ -291,9 +290,8 @@ public class CacheServerJmxImpl extends CacheServerImpl
   // MBean Operations
   // -------------------------------------------------------------------------
 
-  public void refreshConfig()
-    throws AdminException {
-    // 1st call to refreshConfig would trigger 
+  public void refreshConfig() throws AdminException {
+    // 1st call to refreshConfig would trigger
     // the auto-refresh if an interval is set
     if (this.refreshInterval > 0) {
       this._setRefreshInterval(this.refreshInterval);
@@ -408,8 +406,7 @@ public class CacheServerJmxImpl extends CacheServerImpl
    * @throws AdminException if constructing StatisticResourceJmxImpl instance fails
    */
   @Override
-  protected StatisticResource createStatisticResource(StatResource stat)
-    throws AdminException {
+  protected StatisticResource createStatisticResource(StatResource stat) throws AdminException {
     StatisticResourceJmxImpl managedStatisticResource = null;
 
     synchronized (this.managedStatisticsResourcesMap) {
@@ -437,8 +434,7 @@ public class CacheServerJmxImpl extends CacheServerImpl
    * @throws AdminException if constructing SystemMemberCacheJmxImpl instance fails
    */
   @Override
-  protected SystemMemberCache createSystemMemberCache(GemFireVM vm)
-    throws AdminException {
+  protected SystemMemberCache createSystemMemberCache(GemFireVM vm) throws AdminException {
     if (managedSystemMemberCache == null) {
       managedSystemMemberCache = new SystemMemberCacheJmxImpl(vm);
     }
@@ -456,8 +452,7 @@ public class CacheServerJmxImpl extends CacheServerImpl
    * @return a new instance of ManagedBean copied from <code>managed</code> but with the new
    *         attributes added
    */
-  public ManagedBean addDynamicAttributes(ManagedBean managed) 
-  throws AdminException {
+  public ManagedBean addDynamicAttributes(ManagedBean managed) throws AdminException {
     return Helper.addDynamicAttributes(this, managed);
   }
 

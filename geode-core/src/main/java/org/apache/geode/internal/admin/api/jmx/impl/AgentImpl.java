@@ -79,8 +79,7 @@ import org.apache.geode.internal.logging.log4j.LogWriterAppenders;
  *
  * @since GemFire 3.5
  */
-public class AgentImpl
-implements Agent, ManagedResource {
+public class AgentImpl implements Agent, ManagedResource {
 
   private static final Logger logger = LogService.getLogger();
 
@@ -874,7 +873,8 @@ implements Agent, ManagedResource {
   /**
    * Creates a LogWriterI18n for this Agent to use in logging.
    */
-  @edu.umd.cs.findbugs.annotations.SuppressWarnings(value="RV_RETURN_VALUE_IGNORED_BAD_PRACTICE", justification="Return value for file delete is not important here.") 
+  @edu.umd.cs.findbugs.annotations.SuppressWarnings(value = "RV_RETURN_VALUE_IGNORED_BAD_PRACTICE",
+      justification = "Return value for file delete is not important here.")
   private void initLogWriter() throws AdminException {
     final LogConfig logConfig = this.agentConfig.createLogConfig();
 
@@ -1029,7 +1029,7 @@ implements Agent, ManagedResource {
    * @param config
    */
   private AdminDistributedSystem createDistributedSystem(AgentConfigImpl config)
-  throws AdminException {
+      throws AdminException {
     return new AdminDistributedSystemJmxImpl(config);
   }
 
@@ -1040,8 +1040,8 @@ implements Agent, ManagedResource {
   /**
    * Command-line main for running the GemFire Management Agent.
    * <p>
-   * Accepts command-line arguments matching the options in {@link AgentConfig}
-   * and {@link DistributedSystemConfig}.
+   * Accepts command-line arguments matching the options in {@link AgentConfig} and
+   * {@link DistributedSystemConfig}.
    * <p>
    * <code>AgentConfig</code> will convert -Jarguments to System properties.
    */

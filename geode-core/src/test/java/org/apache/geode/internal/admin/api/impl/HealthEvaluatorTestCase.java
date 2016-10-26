@@ -26,9 +26,7 @@ import java.util.Properties;
 import static org.apache.geode.distributed.ConfigurationProperties.*;
 
 /**
- * Superclass of tests for the {@linkplain
- * AbstractHealthEvaluator health
- * evaluator} classes.
+ * Superclass of tests for the {@linkplain AbstractHealthEvaluator health evaluator} classes.
  *
  *
  * @since GemFire 3.5

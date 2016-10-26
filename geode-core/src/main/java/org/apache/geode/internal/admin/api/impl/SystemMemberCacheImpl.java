@@ -148,9 +148,7 @@ public class SystemMemberCacheImpl implements SystemMemberCache {
     return this.statistics;
   }
 
-  public SystemMemberRegion getRegion(String path)
-    throws AdminException
-  {
+  public SystemMemberRegion getRegion(String path) throws AdminException {
     Region r = this.vm.getRegion(this.info, path);
     if (r == null) {
       return null;
@@ -243,9 +241,7 @@ public class SystemMemberCacheImpl implements SystemMemberCache {
     return new StatisticImpl(stat);
   }
 
-  protected SystemMemberRegion createSystemMemberRegion(Region r)
-    throws AdminException
-  {
+  protected SystemMemberRegion createSystemMemberRegion(Region r) throws AdminException {
     SystemMemberRegionImpl sysMemberRegion = new SystemMemberRegionImpl(this, r);
     sysMemberRegion.refresh();
     return sysMemberRegion;

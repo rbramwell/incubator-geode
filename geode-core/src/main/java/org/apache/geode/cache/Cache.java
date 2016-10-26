@@ -274,14 +274,12 @@ public interface Cache extends GemFireCache {
    * @since GemFire 7.0
    */
   public GatewayConflictResolver getGatewayConflictResolver();
-  
+
   /**
-   * Sets whether or not this <code>Cache</code> resides in a
-   * long-running "cache server" VM.  A cache server may be an
-   * application VM or may be a stand-along VM launched using {@linkplain
-   * AdminDistributedSystem#addCacheServer
-   * administration API} or the <code>cacheserver</code> command line
-   * utility.
+   * Sets whether or not this <code>Cache</code> resides in a long-running "cache server" VM. A
+   * cache server may be an application VM or may be a stand-along VM launched using
+   * {@linkplain AdminDistributedSystem#addCacheServer administration API} or the
+   * <code>cacheserver</code> command line utility.
    *
    * @since GemFire 4.0
    */

@@ -423,9 +423,9 @@ public abstract class RemoteGemFireVM implements GemFireVM {
   }
 
   /**
-   * Returns the runtime {@link GemFireMemberStatus} from the vm
-   * The idea is this snapshot is similar to stats that represent the current state of a 
-   * running VM. However, this is a bit higher level than a stat 
+   * Returns the runtime {@link GemFireMemberStatus} from the vm The idea is this snapshot is
+   * similar to stats that represent the current state of a running VM. However, this is a bit
+   * higher level than a stat
    */
   public GemFireMemberStatus getSnapshot() {
     RefreshMemberSnapshotResponse response =
@@ -434,8 +434,8 @@ public abstract class RemoteGemFireVM implements GemFireVM {
   }
 
   /**
-   * Returns the runtime {@link RegionSubRegionSnapshot} from the vm
-   * The idea is this snapshot is quickly salvageable to present a cache's region's info 
+   * Returns the runtime {@link RegionSubRegionSnapshot} from the vm The idea is this snapshot is
+   * quickly salvageable to present a cache's region's info
    */
   public RegionSubRegionSnapshot getRegionSnapshot() {
     RegionSubRegionsSizeResponse response =

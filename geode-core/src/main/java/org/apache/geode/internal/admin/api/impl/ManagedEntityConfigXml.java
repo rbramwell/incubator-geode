@@ -23,9 +23,8 @@ import org.xml.sax.*;
 import java.io.InputStream;
 
 /**
- * The abstract superclass of classes that convert XML into a {@link
- * DistributedSystemConfig} and vice versa.
- * It provides helper methods and constants.
+ * The abstract superclass of classes that convert XML into a {@link DistributedSystemConfig} and
+ * vice versa. It provides helper methods and constants.
  *
  * @since GemFire 4.0
  */
@@ -33,7 +32,7 @@ abstract class ManagedEntityConfigXml implements EntityResolver, ErrorHandler {
 
   /** The location of the DTD file */
   protected static final String DTD_LOCATION =
-    "/org/apache/geode/internal/admin/doc-files/ds5_0.dtd";
+      "/org/apache/geode/internal/admin/doc-files/ds5_0.dtd";
 
   /** The URL for the DTD */
   protected static final String SYSTEM_ID = "http://www.gemstone.com/dtd/ds5_0.dtd";

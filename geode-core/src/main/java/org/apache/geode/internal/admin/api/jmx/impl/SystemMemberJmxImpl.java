@@ -57,9 +57,8 @@ import org.apache.geode.internal.logging.LogService;
  * @since GemFire 3.5
  *
  */
-public class SystemMemberJmxImpl 
-extends SystemMemberImpl
-implements SystemMemberJmx, javax.management.NotificationListener, ManagedResource {
+public class SystemMemberJmxImpl extends SystemMemberImpl
+    implements SystemMemberJmx, javax.management.NotificationListener, ManagedResource {
 
   private static final Logger logger = LogService.getLogger();
 
@@ -89,9 +88,8 @@ implements SystemMemberJmx, javax.management.NotificationListener, ManagedResour
    * @param system the distributed system this SystemMember is a member of
    * @param application the internal admin application to delegate actual work
    */
-  public SystemMemberJmxImpl(AdminDistributedSystemJmxImpl system,
-                             ApplicationVM application)
-                      throws AdminException {
+  public SystemMemberJmxImpl(AdminDistributedSystemJmxImpl system, ApplicationVM application)
+      throws AdminException {
     super(system, application);
     initializeMBean();
   }
@@ -114,10 +112,9 @@ implements SystemMemberJmx, javax.management.NotificationListener, ManagedResour
   }
 
   /** Create and register the MBean to manage this resource */
-  private void initializeMBean() 
-  throws AdminException {
-    //initialize Managed Resources for stats & cache first.
-//    initializeManagedResources();
+  private void initializeMBean() throws AdminException {
+    // initialize Managed Resources for stats & cache first.
+    // initializeManagedResources();
 
     this.mbeanName = new StringBuffer("GemFire.Member:id=")
         .append(MBeanUtil.makeCompliantMBeanNameProperty(getId())).append(",type=")
@@ -299,8 +296,7 @@ implements SystemMemberJmx, javax.management.NotificationListener, ManagedResour
    * @throws AdminException if constructing StatisticResourceJmxImpl instance fails
    */
   @Override
-  protected StatisticResource createStatisticResource(StatResource stat)
-    throws AdminException {
+  protected StatisticResource createStatisticResource(StatResource stat) throws AdminException {
     StatisticResourceJmxImpl managedStatisticResource = null;
 
     synchronized (this.managedStatisticsResourcesMap) {
@@ -328,8 +324,7 @@ implements SystemMemberJmx, javax.management.NotificationListener, ManagedResour
    * @throws AdminException if constructing SystemMemberCacheJmxImpl instance fails
    */
   @Override
-  protected SystemMemberCache createSystemMemberCache(GemFireVM vm)
-    throws AdminException {
+  protected SystemMemberCache createSystemMemberCache(GemFireVM vm) throws AdminException {
     if (managedSystemMemberCache == null) {
       managedSystemMemberCache = new SystemMemberCacheJmxImpl(vm);
     }

@@ -158,10 +158,11 @@ public class MBeanUtil {
               LocalizedStrings.MBeanUtil_MBEAN_SERVER_NOT_INITIALIZED_YET.toLocalizedString());
         }
         registry.setMBeanServer(mbeanServer);
-  
-        String mbeansResource = getOSPath("/org/apache/geode/internal/admin/api/jmx/mbeans-descriptors.xml");
-        //System.out.println(LocalizedStrings.MBeanUtil_LOADING_RESOURCE_0.toLocalizedString(mbeansResource));
-        
+
+        String mbeansResource =
+            getOSPath("/org/apache/geode/internal/admin/api/jmx/mbeans-descriptors.xml");
+        // System.out.println(LocalizedStrings.MBeanUtil_LOADING_RESOURCE_0.toLocalizedString(mbeansResource));
+
         URL url = ClassPathLoader.getLatest().getResource(MBeanUtil.class, mbeansResource);
         raiseOnFailure(url != null, LocalizedStrings.MBeanUtil_FAILED_TO_FIND_0
             .toLocalizedString(new Object[] {mbeansResource}));
@@ -286,8 +287,7 @@ public class MBeanUtil {
     }
 
     // customize the defn...
-    managed.setClassName(
-        "MX4JModelMBean");
+    managed.setClassName("MX4JModelMBean");
 
     return managed;
   }
@@ -666,7 +666,7 @@ public class MBeanUtil {
       }
     }
   }
-  
+
   // ----- borrowed the following from RemoteCommand -----
   /** Translates the path between Windows and UNIX. */
   static String getOSPath(String path) {

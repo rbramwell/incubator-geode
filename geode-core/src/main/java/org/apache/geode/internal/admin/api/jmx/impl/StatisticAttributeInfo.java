@@ -21,11 +21,10 @@ import javax.management.Descriptor;
 import javax.management.modelmbean.DescriptorSupport;
 import javax.management.modelmbean.ModelMBeanAttributeInfo;
 
-/** 
- * Subclass of AttributeInfo with {@link Statistic}
- * added for use as the {@link 
- * javax.management.modelmbean.ModelMBeanAttributeInfo} descriptor's 
- * <i>targetObject</i> value.
+/**
+ * Subclass of AttributeInfo with {@link Statistic} added for use as the
+ * {@link javax.management.modelmbean.ModelMBeanAttributeInfo} descriptor's <i>targetObject</i>
+ * value.
  *
  * @since GemFire 3.5
  *

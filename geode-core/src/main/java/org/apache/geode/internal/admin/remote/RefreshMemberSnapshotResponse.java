@@ -28,8 +28,8 @@ import org.apache.geode.distributed.internal.membership.InternalDistributedMembe
 import org.apache.geode.internal.cache.GemFireCacheImpl;
 
 /**
- * A message that is sent to a particular distribution manager to get its
- * current {@link GemFireMemberStatus}.
+ * A message that is sent to a particular distribution manager to get its current
+ * {@link GemFireMemberStatus}.
  * 
  */
 public class RefreshMemberSnapshotResponse extends AdminResponse {

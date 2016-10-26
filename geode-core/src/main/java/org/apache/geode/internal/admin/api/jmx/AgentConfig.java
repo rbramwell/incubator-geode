@@ -16,7 +16,7 @@ package org.apache.geode.internal.admin.api.jmx;
 
 import org.apache.geode.internal.admin.api.DistributedSystemConfig;
 import org.apache.geode.distributed.internal.DistributionConfig;
-//import InetAddressUtil;
+// import InetAddressUtil;
 
 /**
  * A configuration object for a JMX administration {@linkplain Agent agent} that is hosted by a

@@ -32,7 +32,8 @@ import java.io.*;
 public class GenerateMBeanHTML extends DefaultHandler {
 
   /** The location of the DTD for the MBean descriptions */
-  private static final String DTD_LOCATION = "/org/apache/geode/internal/admin/api/jmx/impl/doc-files/mbeans-descriptors.dtd";
+  private static final String DTD_LOCATION =
+      "/org/apache/geode/internal/admin/api/jmx/impl/doc-files/mbeans-descriptors.dtd";
 
   // /** The system id of MBean description's DTD */
   // private static final String SYSTEM_ID =

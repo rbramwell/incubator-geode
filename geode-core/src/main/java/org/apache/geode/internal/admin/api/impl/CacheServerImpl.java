@@ -49,9 +49,8 @@ public class CacheServerImpl extends ManagedSystemMemberImpl implements CacheVm,
    * Creates a new <code>CacheServerImpl</code> that represents a non-existsing (unstarted) cache
    * server in a given distributed system.
    */
-  public CacheServerImpl(AdminDistributedSystemImpl system,
-                         CacheVmConfig config)
-    throws AdminException {
+  public CacheServerImpl(AdminDistributedSystemImpl system, CacheVmConfig config)
+      throws AdminException {
 
     super(system, config);
 

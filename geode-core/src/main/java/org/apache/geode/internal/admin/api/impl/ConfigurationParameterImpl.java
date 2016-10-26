@@ -31,9 +31,8 @@ import java.util.List;
  * @since GemFire 3.5
  *
  */
-public class ConfigurationParameterImpl
-implements ConfigurationParameter {
-  
+public class ConfigurationParameterImpl implements ConfigurationParameter {
+
   /** Identifying name of this configuration parameter */
   protected String name;
   /** Full description of this configuration parameter */

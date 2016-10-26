@@ -38,9 +38,8 @@ import org.apache.geode.internal.logging.LogService;
  * @since GemFire 3.5
  *
  */
-public class StatisticResourceJmxImpl 
-extends StatisticResourceImpl
-implements javax.management.NotificationListener, ManagedResource {
+public class StatisticResourceJmxImpl extends StatisticResourceImpl
+    implements javax.management.NotificationListener, ManagedResource {
 
   private static final Logger logger = LogService.getLogger();
 
@@ -62,27 +61,24 @@ implements javax.management.NotificationListener, ManagedResource {
   /**
    * Constructor for the StatisticResource object
    *
-   * @param statResource  the admin StatResource to manage/monitor
-   * @param member        the SystemMember owning this resource
-   * @exception AdminException
-   *            if unable to create this StatisticResource for administration
+   * @param statResource the admin StatResource to manage/monitor
+   * @param member the SystemMember owning this resource
+   * @exception AdminException if unable to create this StatisticResource for administration
    */
-  public StatisticResourceJmxImpl(StatResource statResource,
-                                  SystemMemberJmx member)
-                           throws AdminException {
+  public StatisticResourceJmxImpl(StatResource statResource, SystemMemberJmx member)
+      throws AdminException {
     super(statResource, member);
     initializeMBean();
   }
 
   /** Create and register the MBean to manage this resource */
-  private void initializeMBean() 
-  throws AdminException {
-    this.mbeanName = new StringBuffer("GemFire.Statistic:")
-                      .append("source=").append(MBeanUtil.makeCompliantMBeanNameProperty(this.member.getId()))
-                      .append(",type=").append(MBeanUtil.makeCompliantMBeanNameProperty(getType()))
-                      .append(",name=").append(MBeanUtil.makeCompliantMBeanNameProperty(getName()))
-                      .append(",uid=").append(getUniqueId()).toString();
-      
+  private void initializeMBean() throws AdminException {
+    this.mbeanName = new StringBuffer("GemFire.Statistic:").append("source=")
+        .append(MBeanUtil.makeCompliantMBeanNameProperty(this.member.getId())).append(",type=")
+        .append(MBeanUtil.makeCompliantMBeanNameProperty(getType())).append(",name=")
+        .append(MBeanUtil.makeCompliantMBeanNameProperty(getName())).append(",uid=")
+        .append(getUniqueId()).toString();
+
     this.objectName =
         MBeanUtil.createMBean(this, addDynamicAttributes(MBeanUtil.lookupManagedBean(this)));
 
@@ -228,8 +224,7 @@ implements javax.management.NotificationListener, ManagedResource {
    * @return a new instance of ManagedBean copied from <code>managed</code> but with the new
    *         attributes added
    */
-  ManagedBean addDynamicAttributes(ManagedBean managed) 
-  throws AdminException {
+  ManagedBean addDynamicAttributes(ManagedBean managed) throws AdminException {
     if (managed == null) {
       throw new IllegalArgumentException(
           LocalizedStrings.StatisticResourceJmxImpl_MANAGEDBEAN_IS_NULL.toLocalizedString());

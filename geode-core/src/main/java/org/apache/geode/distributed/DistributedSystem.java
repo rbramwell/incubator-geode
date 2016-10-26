@@ -44,15 +44,11 @@ import java.util.concurrent.TimeUnit;
 import static org.apache.geode.distributed.ConfigurationProperties.*;
 
 /**
- * A "connection" to a GemFire distributed system.  A
- * <code>DistributedSystem</code> is created by invoking the {@link
- * #connect} method with a configuration as described <a
- * href="#configuration">below</a>.  A <code>DistributedSystem</code>
- * is used when calling {@link
- * org.apache.geode.cache.CacheFactory#create}.  This class should
- * not be confused with the {@link
- * AdminDistributedSystem
- * AdminDistributedSystem} interface that is used for administering a
+ * A "connection" to a GemFire distributed system. A <code>DistributedSystem</code> is created by
+ * invoking the {@link #connect} method with a configuration as described
+ * <a href="#configuration">below</a>. A <code>DistributedSystem</code> is used when calling
+ * {@link org.apache.geode.cache.CacheFactory#create}. This class should not be confused with the
+ * {@link AdminDistributedSystem AdminDistributedSystem} interface that is used for administering a
  * distributed system.
  *
  * <P>
@@ -135,25 +131,18 @@ public abstract class DistributedSystem implements StatisticsFactory {
    * @param config The <a href="#configuration">configuration properties</a> used when connecting to
    *        the distributed system
    *
-   * @throws IllegalArgumentException
-   *         If <code>config</code> contains an unknown configuration
-   *         property or a configuration property does not have an
-   *         allowed value.  Note that the values of boolean
-   *         properties are parsed using {@link Boolean#valueOf(java.lang.String)}.
-   *         Therefore all values other than "true" values will be
-   *         considered <code>false</code> -- an exception will not be
-   *         thrown.
-   * @throws IllegalStateException
-   *         If a <code>DistributedSystem</code> with a different
-   *         configuration has already been created in this VM or if
-   *         this VM is {@link
-   *         AdminDistributedSystem
-   *         administering} a distributed system.
-   * @throws org.apache.geode.GemFireIOException
-   *         Problems while reading configuration properties file or
-   *         while opening the log file.
-   * @throws org.apache.geode.GemFireConfigException
-   *         The distribution transport is not configured correctly
+   * @throws IllegalArgumentException If <code>config</code> contains an unknown configuration
+   *         property or a configuration property does not have an allowed value. Note that the
+   *         values of boolean properties are parsed using
+   *         {@link Boolean#valueOf(java.lang.String)}. Therefore all values other than "true"
+   *         values will be considered <code>false</code> -- an exception will not be thrown.
+   * @throws IllegalStateException If a <code>DistributedSystem</code> with a different
+   *         configuration has already been created in this VM or if this VM is
+   *         {@link AdminDistributedSystem administering} a distributed system.
+   * @throws org.apache.geode.GemFireIOException Problems while reading configuration properties
+   *         file or while opening the log file.
+   * @throws org.apache.geode.GemFireConfigException The distribution transport is not configured
+   *         correctly
    *
    * @deprecated as of 6.5 use {@link CacheFactory#create} or {@link ClientCacheFactory#create}
    *             instead.
@@ -322,6 +311,7 @@ public abstract class DistributedSystem implements StatisticsFactory {
 
   /**
    * see {@link AdminDistributedSystemFactory}
+   * 
    * @since GemFire 5.7
    */
   protected static void setEnableAdministrationOnly(boolean adminOnly) {
@@ -335,12 +325,11 @@ public abstract class DistributedSystem implements StatisticsFactory {
     }
   }
 
-  //////////////////////  Constructors  //////////////////////
+  ////////////////////// Constructors //////////////////////
 
   /**
-   * Creates a new instance of <code>DistributedSystem</code>.  This
-   * constructor is protected so that it may only be invoked by
-   * subclasses.
+   * Creates a new instance of <code>DistributedSystem</code>. This constructor is protected so that
+   * it may only be invoked by subclasses.
    */
   protected DistributedSystem() {
 

@@ -104,8 +104,7 @@ public class AdminDistributedSystemJmxImpl extends AdminDistributedSystemImpl
    * 
    * @param config configuration defining the JMX agent.
    */
-  public AdminDistributedSystemJmxImpl(AgentConfigImpl config)
-      throws AdminException {
+  public AdminDistributedSystemJmxImpl(AgentConfigImpl config) throws AdminException {
     super(config);
     this.mbeanName = "GemFire:type=AdminDistributedSystem,id="
         + MBeanUtil.makeCompliantMBeanNameProperty(getId());
@@ -225,8 +224,7 @@ public class AdminDistributedSystemJmxImpl extends AdminDistributedSystemImpl
 
   /** Override createSystemMember by instantiating SystemMemberJmxImpl */
   @Override
-  protected SystemMember createSystemMember(ApplicationVM app)
-  throws AdminException {
+  protected SystemMember createSystemMember(ApplicationVM app) throws AdminException {
     return new SystemMemberJmxImpl(this, app);
   }
 
@@ -237,8 +235,7 @@ public class AdminDistributedSystemJmxImpl extends AdminDistributedSystemImpl
    * @param member InternalDistributedMember instance for which a SystemMember instance is to be
    *        constructed.
    * @return constructed SystemMember instance
-   * @throws AdminException
-   *           if construction of SystemMember instance fails
+   * @throws AdminException if construction of SystemMember instance fails
    *
    * @since GemFire 6.5
    */
@@ -249,8 +246,7 @@ public class AdminDistributedSystemJmxImpl extends AdminDistributedSystemImpl
 
 
   @Override
-  protected CacheServer createCacheServer(ApplicationVM member)
-    throws AdminException {
+  protected CacheServer createCacheServer(ApplicationVM member) throws AdminException {
 
     return new CacheServerJmxImpl(this, member);
   }
@@ -263,8 +259,7 @@ public class AdminDistributedSystemJmxImpl extends AdminDistributedSystemImpl
 
   /** Override createGemFireHealth by instantiating GemFireHealthJmxImpl */
   @Override
-  protected GemFireHealth createGemFireHealth(GfManagerAgent system)
-    throws AdminException {
+  protected GemFireHealth createGemFireHealth(GfManagerAgent system) throws AdminException {
     if (system == null) {
       throw new IllegalStateException(
           LocalizedStrings.AdminDistributedSystemJmxImpl_GFMANAGERAGENT_MUST_NOT_BE_NULL
@@ -435,7 +430,7 @@ public class AdminDistributedSystemJmxImpl extends AdminDistributedSystemImpl
       } catch (javax.management.MBeanException e) {
         logger.warn(e.getMessage(), e);
       }
-      
+
       SystemMemberType memberType = member.getType();
       if (/* member != null && */ memberType.isApplication() || memberType.isCacheVm()) {
         // automatically unregister the MBean...

@@ -74,10 +74,9 @@ public interface StatisticResource {
    * Refreshes the values of every {@link Statistic} in this resource by retrieving them from the
    * member's VM.
    *
-   * @throws AdminException
-   *         if unable to refresh statistic values
+   * @throws AdminException if unable to refresh statistic values
    */
   public void refresh() throws AdminException;
-  
+
 }
 
